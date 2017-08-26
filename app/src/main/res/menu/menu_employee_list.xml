@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_icon_sort"
+        android:title="@string/sort"
+        android:icon="@drawable/ic_sort_by_alpha_black_24dp"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="1"
+        ></item>
+
+    <item
+        android:id="@+id/menu_item_grid"
+        android:title="@string/gridList"
+        android:icon="@drawable/ic_grid_on_black_24dp"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="2"
+        ></item>
+</menu>

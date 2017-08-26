@@ -20,7 +20,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.rza.firebaseloginpractice.R;
@@ -42,8 +41,9 @@ public class AddNewEmployeeActivity extends AppCompatActivity {
     private Employee employee;
     private static int RESULT_LOAD_IMAGE = 2;
     private static int MY_PERMISSION_INTERNAL_STORAGE = 3;
-    private static int RESULT_CAMERA_IMAGE = 4;
+    private static final int REQUEST_IMAGE_CAPTURE = 4;
     private static int MY_PERMISSION_CAMERA = 5;
+    private Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,7 +141,7 @@ public class AddNewEmployeeActivity extends AppCompatActivity {
                 btnStorage.setOnClickListener(new View.OnClickListener() { //klik na ikonicu storage-a u dialogu
                     @Override
                     public void onClick(View v) {
-                        importFromStorage();
+                        importFromStorageIntent();
                         dialog.dismiss();
                     }
                 });
@@ -149,7 +149,7 @@ public class AddNewEmployeeActivity extends AppCompatActivity {
                 btnCamera.setOnClickListener(new View.OnClickListener() { //klik na ikonicu kamere u dialogu
                     @Override
                     public void onClick(View v) {
-                        importFromCamera();
+                        importFromCameraIntent();
                         dialog.dismiss();
                     }
                 });
@@ -172,21 +172,19 @@ public class AddNewEmployeeActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null) { //otvara internal storage
             if (isStoragePermissionGranted()) {
-                Uri selectedImage = data.getData();
-                String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                cursor.moveToFirst();
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                String picturePath = cursor.getString(columnIndex);
-                imgEmployee.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-                storePhoto();
+                String imagePath = getImageFromStorage(data); //vraca string image path-a
+                imgEmployee.setImageBitmap(BitmapFactory.decodeFile(imagePath)); //postavlja sliku na image view
+                storePhoto(); //dodaje sliku na storage
+                toast = Toast.makeText(AddNewEmployeeActivity.this, "Wait while image is uploading...", Toast.LENGTH_LONG);
+                toast.show();
             }
         }
-        else if (requestCode == RESULT_CAMERA_IMAGE && resultCode == RESULT_OK && data != null) { //otvara kameru
+        else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) { //otvara kameru
             if (isCameraPermissionGranted()) {
-                Bitmap photo = (Bitmap) data.getExtras().get("data");
-                imgEmployee.setImageBitmap(photo);
+                //dodati logiku za dodavanje sa kamere
                 storePhoto();
+
+
             }
         }
     }
@@ -218,14 +216,17 @@ public class AddNewEmployeeActivity extends AppCompatActivity {
         return false;
     }
 
-    public void importFromStorage() {
+    public void importFromStorageIntent() {
         Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(i, RESULT_LOAD_IMAGE);
     }
 
-    public void importFromCamera() {
-        Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(i, RESULT_CAMERA_IMAGE);
+    public void importFromCameraIntent() {
+        Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if (i.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(i, REQUEST_IMAGE_CAPTURE);
+        }
     }
 
     public void storePhoto() { //metoda postavlja bitmap na image view i upisuje tu sliku u firebase storage
@@ -235,9 +236,24 @@ public class AddNewEmployeeActivity extends AppCompatActivity {
             public void onImageUploaded(String url) {
                 employee.setImgUri(url);
                 Log.d("URI", url);
-                Toast.makeText(AddNewEmployeeActivity.this, "Image Uploaded", Toast.LENGTH_SHORT).show();
+                if (toast != null) { //gasi image uploading toast i postavlja image done toast
+                    toast = null;
+                }
+                    toast = Toast.makeText(AddNewEmployeeActivity.this, "Image is Uploaded!", Toast.LENGTH_SHORT);
+                    toast.show();
+
             }
         });
+    }
+
+    public String getImageFromStorage(Intent data) {
+        Uri selectedImage = data.getData();
+        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+        cursor.moveToFirst();
+        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+        String picturePath = cursor.getString(columnIndex);
+        return picturePath;
     }
 
 

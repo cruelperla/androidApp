@@ -4,4 +4,6 @@
     <string name="welcome">Welcome</string>
     <string name="assets">Assets</string>
     <string name="employees">Employees</string>
+    <string name="sort">Sort by</string>
+    <string name="gridList">Grid/List</string>
 </resources>

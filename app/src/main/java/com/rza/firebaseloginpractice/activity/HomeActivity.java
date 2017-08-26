@@ -87,9 +87,9 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = new MenuInflater(this);
+        MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_home, menu);
-        return super.onCreateOptionsMenu(menu);
+        return true;
 
     }
 

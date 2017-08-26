@@ -1,44 +1,34 @@
 package com.rza.firebaseloginpractice.adapter;
 
-import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.rza.firebaseloginpractice.R;
-import com.rza.firebaseloginpractice.dao.EmployeeDao;
 import com.rza.firebaseloginpractice.model.Employee;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Rza on 23-Aug-17.
  */
 
-public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.EmployeeViewHolder> {
+public class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.EmployeeViewHolder> {
 
     private ArrayList<Employee> employees = new ArrayList<>();
 
-    public EmployeeAdapter(){
+    public BaseAdapter(){
 
     }
 
 
     @Override
     public EmployeeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
-        LayoutInflater inflater = LayoutInflater.from(context);
-        int layoutId = R.layout.recycler_employee_row;
-
-        View view = inflater.inflate(layoutId, parent, false);
-        EmployeeViewHolder vh = new EmployeeViewHolder(view);
-        return vh;
+        return null;
     }
 
     @Override

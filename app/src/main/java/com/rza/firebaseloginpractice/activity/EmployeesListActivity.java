@@ -1,34 +1,32 @@
 package com.rza.firebaseloginpractice.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.rza.firebaseloginpractice.R;
-import com.rza.firebaseloginpractice.adapter.EmployeeAdapter;
-import com.rza.firebaseloginpractice.dao.EmployeeDao;
-import com.rza.firebaseloginpractice.model.Employee;
-import com.rza.firebaseloginpractice.model.User;
+import com.rza.firebaseloginpractice.adapter.BaseAdapter;
+import com.rza.firebaseloginpractice.adapter.EmployeeGridAdapter;
+import com.rza.firebaseloginpractice.adapter.EmployeeLinearAdapter;
 
-import java.util.ArrayList;
+import java.util.Collections;
 
 public class EmployeesListActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private EmployeeAdapter adapter;
+    private BaseAdapter adapter;
     private FloatingActionButton fab;
     private static String TAG = "LOG";
+    private int gridListCounter;
 
 
 
@@ -39,28 +37,11 @@ public class EmployeesListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_employees_list);
         recyclerView = (RecyclerView) findViewById(R.id.rv_employees);
         fab = (FloatingActionButton) findViewById(R.id.fab_add_employee);
+        gridListCounter = 1;
         afterViews();
-
     }
 
-    private void afterViews() {
-        adapter = new EmployeeAdapter();
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
 
-
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(layoutManager);
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(EmployeesListActivity.this, AddNewEmployeeActivity.class);
-                startActivity(i);
-            }
-        });
-
-        adapter.setEmployees(HomeActivity.employeeDao.getEmployees());
-    }
 
     @Override
     protected void onRestart() {
@@ -71,6 +52,62 @@ public class EmployeesListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        adapter.setEmployees(HomeActivity.employeeDao.getEmployees());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_employee_list, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.menu_icon_sort) {
+                Collections.reverse(HomeActivity.employeeDao.getEmployees());
+                adapter.setEmployees(HomeActivity.employeeDao.getEmployees()); //SORTIRANJE (IZVRTANJE)
+        }
+        else if (id == R.id.menu_item_grid) { //menja u grid
+            if (gridListCounter == 1) {
+                gridListCounter = 2;
+                adapter = null;
+                adapter = new EmployeeGridAdapter();
+                adapter.setEmployees(HomeActivity.employeeDao.getEmployees());
+                GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(gridLayoutManager);
+                item.setIcon(R.drawable.ic_list_black_24dp);
+
+            }
+            else if (gridListCounter == 2) { //menja u linear
+                gridListCounter = 1;
+                LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+                adapter = null;
+                adapter = new EmployeeLinearAdapter();
+                adapter.setEmployees(HomeActivity.employeeDao.getEmployees());
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(layoutManager);
+                item.setIcon(R.drawable.ic_grid_on_black_24dp);
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void afterViews() {
+        adapter = new EmployeeLinearAdapter();
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(layoutManager);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(EmployeesListActivity.this, AddNewEmployeeActivity.class);
+                startActivity(i);
+            }
+        });
         adapter.setEmployees(HomeActivity.employeeDao.getEmployees());
     }
 }

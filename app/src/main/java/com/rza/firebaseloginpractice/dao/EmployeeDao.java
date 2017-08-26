@@ -91,7 +91,6 @@ public class EmployeeDao {
             });
             Log.d(TAG, "PUBLISHED");
         }
-
     }
     public ArrayList<Employee> getEmployees() {
         Log.d("getEmployee", employees.toString());
