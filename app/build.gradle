@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+
 def FVersion = '10.0.1'
 def CVersion = '25.3.1'
 
@@ -6,6 +7,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
     defaultConfig {
+        multiDexEnabled true
         applicationId "com.rza.firebaseloginpractice"
         minSdkVersion 19
         targetSdkVersion 25
@@ -37,11 +39,15 @@ dependencies {
 
     compile "com.android.support:cardview-v7:$CVersion"
     compile "com.android.support:recyclerview-v7:$CVersion"
+    compile "com.google.android.gms:play-services:$FVersion"
 
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.facebook.fresco:fresco:1.5.0'
-    compile 'com.google.firebase:firebase-database:10.0.1'
+    compile "com.google.firebase:firebase-database:$FVersion"
+    compile "com.google.android.gms:play-services-maps:$FVersion"
+    compile 'com.android.support:appcompat-v7:25.3.1'
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'
+
 

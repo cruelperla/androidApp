@@ -15,17 +15,18 @@ public class Employee {
     private String date;
     private String imgUri;
     private String id;
+    private String officeId;
 
     public Employee() {
 
     }
 
-    public Employee(String name, String email, String position, String date, String imgUri) {
-        this.name = name;
-        this.email = email;
-        this.position = position;
-        this.date = date;
-        this.imgUri = imgUri;
+    public String getOfficeId() {
+        return officeId;
+    }
+
+    public void setOfficeId(String officeId) {
+        this.officeId = officeId;
     }
 
     public String getId() {

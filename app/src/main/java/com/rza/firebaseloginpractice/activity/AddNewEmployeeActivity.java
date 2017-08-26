@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,7 +38,7 @@ public class AddNewEmployeeActivity extends AppCompatActivity {
     private EditText etPosition;
     private EditText etDate;
     private ImageView imgEmployee;
-    private Button btnAdd;
+    private FloatingActionButton btnAdd;
     private Employee employee;
     private static int RESULT_LOAD_IMAGE = 2;
     private static int MY_PERMISSION_INTERNAL_STORAGE = 3;
@@ -56,7 +57,7 @@ public class AddNewEmployeeActivity extends AppCompatActivity {
         etPosition = (EditText) findViewById(R.id.et_position);
         etDate = (EditText) findViewById(R.id.et_employee_date_of_birth);
         imgEmployee = (ImageView) findViewById(R.id.iv_employee_image);
-        btnAdd = (Button) findViewById(R.id.btn_add_employee);
+        btnAdd = (FloatingActionButton) findViewById(R.id.btn_add_employee);
         etName.requestFocus();
 
 

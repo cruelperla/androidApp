@@ -24,6 +24,8 @@ import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 import com.rza.firebaseloginpractice.R;
 import com.rza.firebaseloginpractice.dao.EmployeeDao;
+import com.rza.firebaseloginpractice.dao.OfficeDao;
+import com.rza.firebaseloginpractice.model.Office;
 
 public class HomeActivity extends AppCompatActivity {
     private SimpleDraweeView sdvImage;
@@ -32,17 +34,21 @@ public class HomeActivity extends AppCompatActivity {
     private Button btnEmployees;
     private Button btnAssets;
     static EmployeeDao employeeDao;
+    static OfficeDao officeDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        afterViews();
 
         employeeDao = EmployeeDao.getInstance();
+        officeDao = OfficeDao.getInstance();
+
         employeeDao.init();
-        sdvImage = (SimpleDraweeView) findViewById(R.id.sdv_user_image_home);
-        btnAssets = (Button) findViewById(R.id.btn_assets);
-        btnEmployees = (Button) findViewById(R.id.btn_employees);
+        officeDao.init();
+
+
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -58,6 +64,15 @@ public class HomeActivity extends AppCompatActivity {
                 })
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
+
+
+        btnAssets.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(HomeActivity.this, AddNewOfficeActivity.class);
+                startActivity(i);
+            }
+        });
 
 
 
@@ -110,5 +125,11 @@ public class HomeActivity extends AppCompatActivity {
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void afterViews() {
+        sdvImage = (SimpleDraweeView) findViewById(R.id.sdv_user_image_home);
+        btnAssets = (Button) findViewById(R.id.btn_assets);
+        btnEmployees = (Button) findViewById(R.id.btn_employees);
     }
 }

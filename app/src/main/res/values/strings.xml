@@ -6,4 +6,5 @@
     <string name="employees">Employees</string>
     <string name="sort">Sort by</string>
     <string name="gridList">Grid/List</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
