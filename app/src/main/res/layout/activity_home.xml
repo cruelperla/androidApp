@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.rza.firebaseloginpractice.activity.HomeActivity">
+
+    <TextView
+        android:text="@string/welcome"
+        android:textAlignment="center"
+        android:paddingTop="20dp"
+        android:textSize="30sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/sdv_user_image_home"
+        android:layout_gravity="center"
+        android:paddingTop="20dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:roundedCornerRadius="50dp"/>
+
+
+    <Button
+        android:id="@+id/btn_employees"
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:text="@string/employees"/>
+
+    <Button
+        android:id="@+id/btn_assets"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:text="@string/assets"/>
+
+</LinearLayout>

@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">FirebaseLoginPractice</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="welcome">Welcome</string>
+    <string name="assets">Assets</string>
+    <string name="employees">Employees</string>
+</resources>
