@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -26,6 +25,8 @@ import com.rza.firebaseloginpractice.model.Office;
 import com.rza.firebaseloginpractice.storage.OnImageUploadedListener;
 import com.rza.firebaseloginpractice.storage.PhotoStorage;
 
+import es.dmoral.toasty.Toasty;
+
 public class AddNewOfficeActivity extends AppCompatActivity {
     private EditText etOfficeName;
     private ImageButton btnLocation;
@@ -35,7 +36,6 @@ public class AddNewOfficeActivity extends AppCompatActivity {
     private static int MY_PERMISSION_INTERNAL_STORAGE = 2;
     private static int RESULT_MAPS_ACTIVITY = 3;
     private static int REQUEST_LOCATION = 4;
-    private Toast toast;
     private Office office;
     private TextView tvLat;
     private TextView tvLng;
@@ -68,9 +68,10 @@ public class AddNewOfficeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 office.setName(etOfficeName.getText().toString());
-
-
                 HomeActivity.officeDao.write(office);
+                clearViews();
+                Toasty.success(AddNewOfficeActivity.this, "Office successfully added!", Toast.LENGTH_SHORT, true).show();
+
             }
         });
 
@@ -96,8 +97,7 @@ public class AddNewOfficeActivity extends AppCompatActivity {
                 String imagePath = getImageFromStorage(data); //vraca string image path-a
                 officeImage.setImageBitmap(BitmapFactory.decodeFile(imagePath)); //postavlja sliku na image view
                 storePhoto(); //dodaje sliku na storage
-                toast = Toast.makeText(AddNewOfficeActivity.this, "Wait while image is uploading...", Toast.LENGTH_LONG);
-                toast.show();
+                Toasty.info(AddNewOfficeActivity.this, "Wait while image is uploading...!", Toast.LENGTH_LONG, true).show();
             }
         }
         else if (requestCode == RESULT_MAPS_ACTIVITY && resultCode == RESULT_OK) { //otvara maps activity for result
@@ -159,13 +159,16 @@ public class AddNewOfficeActivity extends AppCompatActivity {
             public void onImageUploaded(String url) {
                 office.setImgUrl(url);
                 Log.d("URI", url);
-                if (toast != null) { //gasi image uploading toast i postavlja image done toast
-                    toast = null;
-                }
-                toast = Toast.makeText(AddNewOfficeActivity.this, "Image is Uploaded!", Toast.LENGTH_SHORT);
-                toast.show();
+                Toasty.success(AddNewOfficeActivity.this, "Image uploaded!", Toast.LENGTH_SHORT, true).show();
             }
         });
+    }
+
+    public void clearViews() {
+        etOfficeName.setText("");
+        tvLat.setText("");
+        tvLng.setText("");
+        officeImage.setImageResource(R.drawable.add_image);
     }
 
 

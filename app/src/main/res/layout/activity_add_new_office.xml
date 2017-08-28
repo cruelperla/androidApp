@@ -37,6 +37,7 @@
     <EditText
         android:id="@+id/et_office_name_add"
         android:layout_marginRight="20dp"
+        android:inputType="textCapWords"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     </LinearLayout>

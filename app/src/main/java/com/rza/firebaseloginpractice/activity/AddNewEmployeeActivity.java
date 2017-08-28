@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.support.annotation.ColorInt;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +36,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import es.dmoral.toasty.Toasty;
+
 public class AddNewEmployeeActivity extends AppCompatActivity {
 
     private EditText etName;
@@ -48,7 +51,7 @@ public class AddNewEmployeeActivity extends AppCompatActivity {
     private static int MY_PERMISSION_INTERNAL_STORAGE = 3;
     private static final int REQUEST_IMAGE_CAPTURE = 4;
     private static int MY_PERMISSION_CAMERA = 5;
-    private Toast toast;
+    private Toasty toasty;
     private Spinner officesSpinner;
 
     @Override
@@ -78,8 +81,7 @@ public class AddNewEmployeeActivity extends AppCompatActivity {
                 String imagePath = getImageFromStorage(data); //vraca string image path-a
                 imgEmployee.setImageBitmap(BitmapFactory.decodeFile(imagePath)); //postavlja sliku na image view
                 storePhoto(); //dodaje sliku na storage
-                toast = Toast.makeText(AddNewEmployeeActivity.this, "Wait while image is uploading...", Toast.LENGTH_LONG);
-                toast.show();
+                Toasty.info(AddNewEmployeeActivity.this, "Wait while image is uploading", Toast.LENGTH_LONG, true).show();
             }
         }
         else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) { //otvara kameru
@@ -139,11 +141,7 @@ public class AddNewEmployeeActivity extends AppCompatActivity {
             public void onImageUploaded(String url) {
                 employee.setImgUri(url);
                 Log.d("URI", url);
-                if (toast != null) { //gasi image uploading toast i postavlja image done toast
-                    toast = null;
-                }
-                    toast = Toast.makeText(AddNewEmployeeActivity.this, "Image is Uploaded!", Toast.LENGTH_SHORT);
-                    toast.show();
+                Toasty.success(AddNewEmployeeActivity.this, "Image uploaded!", Toast.LENGTH_SHORT, true).show();
             }
         });
     }

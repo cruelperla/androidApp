@@ -27,6 +27,8 @@ import com.rza.firebaseloginpractice.dao.EmployeeDao;
 import com.rza.firebaseloginpractice.dao.OfficeDao;
 import com.rza.firebaseloginpractice.model.Office;
 
+import es.dmoral.toasty.Toasty;
+
 public class HomeActivity extends AppCompatActivity {
     private SimpleDraweeView sdvImage;
     private Intent intent;
@@ -94,7 +96,7 @@ public class HomeActivity extends AppCompatActivity {
         String imageUri = intent.getStringExtra("image");
         String name = intent.getStringExtra("name");
 
-        Toast.makeText(HomeActivity.this, "Welcome " + name, Toast.LENGTH_SHORT).show();
+        Toasty.success(HomeActivity.this, "Welcome " + name, Toast.LENGTH_SHORT, true).show();
 
         sdvImage.setImageURI(Uri.parse(imageUri));
 

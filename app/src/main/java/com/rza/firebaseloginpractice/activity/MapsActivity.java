@@ -3,12 +3,14 @@ package com.rza.firebaseloginpractice.activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -50,8 +52,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
         criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        lat = "";
-        lng = "";
         btnOk = (Button) findViewById(R.id.btn_maps_ok);
 
         btnOk.setOnClickListener(new View.OnClickListener() {
@@ -68,10 +68,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
+        try {
+            location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
+        }
+        catch (SecurityException e) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-
-
+                ActivityCompat.requestPermissions(MapsActivity.this, new String[] {Manifest.permission.ACCESS_COARSE_LOCATION}, CHECK_PERMISSION);
+            }
+        }
 
     }
 
@@ -106,6 +112,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (location != null) {
             Log.d("location", "not null");
             LatLng locationgLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+            lat = String.valueOf(locationgLatLng.latitude);
+            lng = String.valueOf(locationgLatLng.longitude);
+
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(locationgLatLng, 13));
             mMap.addMarker(new MarkerOptions()
                     .position(locationgLatLng)
@@ -116,7 +125,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
                     .zoom(17)                   // Sets the zoom
                     .bearing(90)                // Sets the orientation of the camera to east
-                    .tilt(40)                   // Sets the tilt of the camera to 30 degrees
                     .build();                   // Creates a CameraPosition from the builder
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
@@ -125,7 +133,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Criteria criteria = new Criteria();
             criteria.setAccuracy(Criteria.ACCURACY_COARSE);
             String provider = locationManager.getBestProvider(criteria, true);
-            location = locationManager.getLastKnownLocation(provider);
+
+            try {
+                location = locationManager.getLastKnownLocation(provider);
+            }
+            catch (SecurityException e) {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                        ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                    ActivityCompat.requestPermissions(MapsActivity.this, new String[] {Manifest.permission.ACCESS_COARSE_LOCATION}, CHECK_PERMISSION);
+                }
+            }
         }
 
 
@@ -138,6 +156,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setResult(RESULT_CANCELED);
         finish();
     }
+
+
 
     public String getLat() {
         return lat;
