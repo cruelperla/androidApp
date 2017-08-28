@@ -67,10 +67,16 @@ public class AddNewOfficeActivity extends AppCompatActivity {
         btnAdd.setOnClickListener(new View.OnClickListener() { //klik na faboulous button
             @Override
             public void onClick(View v) {
-                office.setName(etOfficeName.getText().toString());
-                HomeActivity.officeDao.write(office);
-                clearViews();
-                Toasty.success(AddNewOfficeActivity.this, "Office successfully added!", Toast.LENGTH_SHORT, true).show();
+                String officeName = etOfficeName.getText().toString();
+                if (officeName != null) {
+                    office.setName(officeName);
+                    HomeActivity.officeDao.write(office);
+                    clearViews();
+                    Toasty.success(AddNewOfficeActivity.this, "Office successfully added!", Toast.LENGTH_SHORT, true).show();
+                }
+                else {
+                    Toasty.error(AddNewOfficeActivity.this, "You have to provide office name!", Toast.LENGTH_SHORT, true).show();
+                }
 
             }
         });

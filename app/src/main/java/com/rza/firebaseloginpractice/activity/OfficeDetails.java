@@ -1,20 +1,23 @@
 package com.rza.firebaseloginpractice.activity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.google.android.gms.location.LocationListener;
 import com.rza.firebaseloginpractice.R;
 import com.rza.firebaseloginpractice.adapter.EmployeeBaseAdapter;
 import com.rza.firebaseloginpractice.adapter.EmployeeLinearAdapterEmployee;
@@ -22,6 +25,8 @@ import com.rza.firebaseloginpractice.model.Employee;
 import com.rza.firebaseloginpractice.model.Office;
 
 import java.util.ArrayList;
+
+import es.dmoral.toasty.Toasty;
 
 public class OfficeDetails extends AppCompatActivity {
     private RecyclerView recyclerView;
@@ -34,6 +39,7 @@ public class OfficeDetails extends AppCompatActivity {
     private String lng;
     private String userLat;
     private String userLng;
+    private static int REQUEST_MAPS_PERMISSION = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +48,7 @@ public class OfficeDetails extends AppCompatActivity {
         tvName = (TextView) findViewById(R.id.tv_office_name_details);
         sdvImage = (SimpleDraweeView) findViewById(R.id.sdv_office_image_details);
         ivNavigation = (ImageView) findViewById(R.id.iv_navigation_image);
+
 
 
         Intent i = getIntent();
@@ -68,16 +75,21 @@ public class OfficeDetails extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (lat != null && lng != null) {
-                    LocationManager locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
-                    String provider = locationManager.getBestProvider(new Criteria(), false);
                     try {
-                        Location location = locationManager.getLastKnownLocation(provider);
+                        final LocationManager locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
+                        final Criteria criteria = new Criteria();
+                        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+                        final String provider = locationManager.getBestProvider(criteria, false);
+                        final Location location = locationManager.getLastKnownLocation(provider);
                         userLat = String.valueOf(location.getLatitude());
                         userLng = String.valueOf(location.getLongitude());
-
                     }
-                    catch (SecurityException e) {
+                    catch (SecurityException | IllegalArgumentException e) {
                         e.printStackTrace();
+                        ActivityCompat.requestPermissions(OfficeDetails.this,
+                                new String[] {Manifest.permission.ACCESS_COARSE_LOCATION,
+                                Manifest.permission.ACCESS_FINE_LOCATION},
+                                REQUEST_MAPS_PERMISSION);
                     }
 
 
