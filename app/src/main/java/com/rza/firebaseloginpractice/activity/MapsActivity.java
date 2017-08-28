@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -39,7 +40,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Button btnOk;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,16 +54,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         lng = "";
         btnOk = (Button) findViewById(R.id.btn_maps_ok);
 
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("lat", lat);
+                    returnIntent.putExtra("lng", lng);
+                    Log.d("lat lng intent", lat + " " + lng);
+                    setResult(RESULT_OK, returnIntent);
+                    finish();
+            }
+        });
 
 
-        try {
-            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
-        }
-        catch (SecurityException e) {
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION}, CHECK_PERMISSION);
-        }
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
+
+
 
 
     }
@@ -96,33 +103,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         });
 
-        btnOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!lat.equals("")) {
-                    Intent returnIntent = new Intent();
-                    returnIntent.putExtra("lat", lat);
-                    returnIntent.putExtra("lng", lng);
-                    setResult(RESULT_OK, returnIntent);
-                    finish();
-                }
-                else {
-                    Toast.makeText(MapsActivity.this, "Choose Your Office Location", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-
-
-
-
         if (location != null) {
             Log.d("location", "not null");
             LatLng locationgLatLng = new LatLng(location.getLatitude(), location.getLongitude());
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(locationgLatLng, 13));
             mMap.addMarker(new MarkerOptions()
-            .position(locationgLatLng)
-            .title("You are Here!"));
+                    .position(locationgLatLng)
+                    .title("You are Here!"));
 
 
             CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -134,8 +121,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
         else {
-            Log.d("location", "is null");
+            Log.d("Location", "is null");
+            Criteria criteria = new Criteria();
+            criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+            String provider = locationManager.getBestProvider(criteria, true);
+            location = locationManager.getLastKnownLocation(provider);
         }
+
+
+
     }
 
     @Override

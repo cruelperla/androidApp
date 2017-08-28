@@ -11,12 +11,12 @@ import com.rza.firebaseloginpractice.R;
  * Created by Rza on 26-Aug-17.
  */
 
-public class EmployeeGridAdapter extends BaseAdapter {
+public class EmployeeLinearAdapterEmployee extends EmployeeBaseAdapter {
 
     @Override
     public EmployeeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
-        int layoutId = R.layout.recycler_employee_row_grid;
+        int layoutId = R.layout.recycler_employee_row_linear;
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View v = inflater.inflate(layoutId, parent, false);

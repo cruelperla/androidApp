@@ -7,23 +7,22 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.rza.firebaseloginpractice.R;
-import com.rza.firebaseloginpractice.adapter.BaseAdapter;
-import com.rza.firebaseloginpractice.adapter.EmployeeGridAdapter;
-import com.rza.firebaseloginpractice.adapter.EmployeeLinearAdapter;
+import com.rza.firebaseloginpractice.adapter.EmployeeBaseAdapter;
+import com.rza.firebaseloginpractice.adapter.EmployeeGridAdapterEmployee;
+import com.rza.firebaseloginpractice.adapter.EmployeeLinearAdapterEmployee;
 
 import java.util.Collections;
 
 public class EmployeesListActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private BaseAdapter adapter;
+    private EmployeeBaseAdapter adapter;
     private FloatingActionButton fab;
     private static String TAG = "LOG";
     private int gridListCounter;
@@ -73,7 +72,7 @@ public class EmployeesListActivity extends AppCompatActivity {
             if (gridListCounter == 1) {
                 gridListCounter = 2;
                 adapter = null;
-                adapter = new EmployeeGridAdapter();
+                adapter = new EmployeeGridAdapterEmployee();
                 adapter.setEmployees(HomeActivity.employeeDao.getEmployees());
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
                 recyclerView.setAdapter(adapter);
@@ -85,7 +84,7 @@ public class EmployeesListActivity extends AppCompatActivity {
                 gridListCounter = 1;
                 LinearLayoutManager layoutManager = new LinearLayoutManager(this);
                 adapter = null;
-                adapter = new EmployeeLinearAdapter();
+                adapter = new EmployeeLinearAdapterEmployee();
                 adapter.setEmployees(HomeActivity.employeeDao.getEmployees());
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(layoutManager);
@@ -96,7 +95,7 @@ public class EmployeesListActivity extends AppCompatActivity {
     }
 
     private void afterViews() {
-        adapter = new EmployeeLinearAdapter();
+        adapter = new EmployeeLinearAdapterEmployee();
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);

@@ -16,9 +16,18 @@ public class Employee {
     private String imgUri;
     private String id;
     private String officeId;
+    private Office office;
 
     public Employee() {
 
+    }
+
+    public Office getOffice() {
+        return office;
+    }
+
+    public void setOffice(Office office) {
+        this.office = office;
     }
 
     public String getOfficeId() {

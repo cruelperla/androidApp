@@ -16,18 +16,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.rza.firebaseloginpractice.R;
 import com.rza.firebaseloginpractice.model.Employee;
+import com.rza.firebaseloginpractice.model.Office;
 import com.rza.firebaseloginpractice.storage.OnImageUploadedListener;
 import com.rza.firebaseloginpractice.storage.PhotoStorage;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -45,118 +49,16 @@ public class AddNewEmployeeActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 4;
     private static int MY_PERMISSION_CAMERA = 5;
     private Toast toast;
+    private Spinner officesSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_employee);
         employee = new Employee();
-
-        etName = (EditText) findViewById(R.id.et_employee_name);
-        etEmail = (EditText) findViewById(R.id.et_employee_email);
-        etPosition = (EditText) findViewById(R.id.et_position);
-        etDate = (EditText) findViewById(R.id.et_employee_date_of_birth);
-        imgEmployee = (ImageView) findViewById(R.id.iv_employee_image);
-        btnAdd = (FloatingActionButton) findViewById(R.id.btn_add_employee);
-        etName.requestFocus();
+        afterViews();
 
 
-
-
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { //klik na add employee
-
-                String name = etName.getText().toString();
-                String email = etEmail.getText().toString();
-                String position = etPosition.getText().toString();
-                employee.setName(name);
-                if (email.equals("")) {
-                    employee.setEmail("Undefined");
-                }
-                else {
-                    employee.setEmail(email);
-                }
-                employee.setPosition(position);
-
-                if (name.equals("") || position.equals("")) {
-                    Toast.makeText(AddNewEmployeeActivity.this, "Please Fill All Necessary Fields", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                        HomeActivity.employeeDao.write(employee); //upisivanje u bazu
-                        HomeActivity.employeeDao.getEmployees().add(employee); //upisuje zaposlenog u array listu
-                        Collections.sort(HomeActivity.employeeDao.getEmployees(), new Comparator<Employee>() { //sortira array listu po imenu
-                            @Override
-                            public int compare(Employee o1, Employee o2) {
-                                return o1.getName().compareTo(o2.getName());
-                            }
-                        });
-                        Toast.makeText(AddNewEmployeeActivity.this, employee.toString() + " added to Database", Toast.LENGTH_SHORT).show();
-                        clearViews(); //sets name, email, position, date to ""
-                }
-            }
-        });
-
-        etDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) { //klik na datum polje
-                if (hasFocus) {
-                    final Dialog dialog = new Dialog(AddNewEmployeeActivity.this);
-                    dialog.setContentView(R.layout.dialog_calendar);
-                    Button btnOk = (Button) dialog.findViewById(R.id.btn_dialog_ok);
-                    Button btnCancel = (Button) dialog.findViewById(R.id.btn_dialog_cancel);
-                    final DatePicker datePicker = (DatePicker) dialog.findViewById(R.id.date_picker_employee);
-
-                    btnOk.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {//ok na na date picker dialogu
-                            String date = String.valueOf(datePicker.getDayOfMonth()) + "." + String.valueOf(datePicker.getMonth()) + "." + String.valueOf(datePicker.getYear());
-                            employee.setDate(date);
-                            etDate.setText(date);
-                            etName.requestFocus();
-                            dialog.dismiss();
-                        }
-                    });
-
-                    btnCancel.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) { //cancel na date picker dialogu
-                            dialog.dismiss();
-                            etName.requestFocus();
-                        }
-                    });
-                    dialog.show();
-                }
-            }
-        });
-
-        imgEmployee.setOnClickListener(new View.OnClickListener() { //listener image view-a otvara dialog odakle se bira import path (camera / storage)
-            @Override
-            public void onClick(View v) {
-                final Dialog dialog = new Dialog(AddNewEmployeeActivity.this);
-                dialog.setContentView(R.layout.dialog_import_photo);
-                ImageButton btnCamera = (ImageButton) dialog.findViewById(R.id.btn_dialog_camera);
-                ImageButton btnStorage = (ImageButton) dialog.findViewById(R.id.btn_dialog_storage);
-                dialog.show();
-
-                btnStorage.setOnClickListener(new View.OnClickListener() { //klik na ikonicu storage-a u dialogu
-                    @Override
-                    public void onClick(View v) {
-                        importFromStorageIntent();
-                        dialog.dismiss();
-                    }
-                });
-
-                btnCamera.setOnClickListener(new View.OnClickListener() { //klik na ikonicu kamere u dialogu
-                    @Override
-                    public void onClick(View v) {
-                        importFromCameraIntent();
-                        dialog.dismiss();
-                    }
-                });
-
-            }
-        });
     }
 
 
@@ -242,7 +144,6 @@ public class AddNewEmployeeActivity extends AppCompatActivity {
                 }
                     toast = Toast.makeText(AddNewEmployeeActivity.this, "Image is Uploaded!", Toast.LENGTH_SHORT);
                     toast.show();
-
             }
         });
     }
@@ -255,6 +156,127 @@ public class AddNewEmployeeActivity extends AppCompatActivity {
         int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
         String picturePath = cursor.getString(columnIndex);
         return picturePath;
+    }
+
+    public void afterViews(){
+        officesSpinner = (Spinner) findViewById(R.id.spinner_offices);
+        etName = (EditText) findViewById(R.id.et_employee_name);
+        etEmail = (EditText) findViewById(R.id.et_employee_email);
+        etPosition = (EditText) findViewById(R.id.et_position);
+        etDate = (EditText) findViewById(R.id.et_employee_date_of_birth);
+        imgEmployee = (ImageView) findViewById(R.id.iv_employee_image);
+        btnAdd = (FloatingActionButton) findViewById(R.id.btn_add_employee);
+        etName.requestFocus();
+
+
+        ArrayList<String> officeNames = new ArrayList<>();
+        final ArrayList<String> officeIds = new ArrayList<>();
+        for (Office office: HomeActivity.officeDao.getOfficeList()) {
+            officeNames.add(office.getName());
+            officeIds.add(office.getId());
+        }
+
+        ArrayAdapter<String> offices = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, officeNames);
+        offices.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        officesSpinner.setAdapter(offices);
+
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { //klik na add employee
+
+                String name = etName.getText().toString();
+                String email = etEmail.getText().toString();
+                String position = etPosition.getText().toString();
+                employee.setName(name);
+                if (email.equals("")) {
+                    employee.setEmail("Undefined");
+                }
+                else {
+                    employee.setEmail(email);
+                }
+                employee.setPosition(position);
+
+                if (name.equals("") || position.equals("")) {
+                    Toast.makeText(AddNewEmployeeActivity.this, "Please Fill All Necessary Fields", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    employee.setOfficeId(officeIds.get(officesSpinner.getSelectedItemPosition()));
+                    HomeActivity.employeeDao.write(employee); //upisivanje u bazu
+                    HomeActivity.employeeDao.getEmployees().add(employee); //upisuje zaposlenog u array listu
+                    Collections.sort(HomeActivity.employeeDao.getEmployees(), new Comparator<Employee>() { //sortira array listu po imenu
+                        @Override
+                        public int compare(Employee o1, Employee o2) {
+                            return o1.getName().compareTo(o2.getName());
+                        }
+                    });
+
+                    Toast.makeText(AddNewEmployeeActivity.this, employee.toString() + " added to Database", Toast.LENGTH_SHORT).show();
+                    clearViews(); //sets name, email, position, date to ""
+                }
+            }
+        });
+
+        etDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) { //klik na datum polje
+                if (hasFocus) {
+                    final Dialog dialog = new Dialog(AddNewEmployeeActivity.this);
+                    dialog.setContentView(R.layout.dialog_calendar);
+                    Button btnOk = (Button) dialog.findViewById(R.id.btn_dialog_ok);
+                    Button btnCancel = (Button) dialog.findViewById(R.id.btn_dialog_cancel);
+                    final DatePicker datePicker = (DatePicker) dialog.findViewById(R.id.date_picker_employee);
+
+                    btnOk.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {//ok na na date picker dialogu
+                            String date = String.valueOf(datePicker.getDayOfMonth()) + "." + String.valueOf(datePicker.getMonth()) + "." + String.valueOf(datePicker.getYear());
+                            employee.setDate(date);
+                            etDate.setText(date);
+                            etName.requestFocus();
+                            dialog.dismiss();
+                        }
+                    });
+
+                    btnCancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) { //cancel na date picker dialogu
+                            dialog.dismiss();
+                            etName.requestFocus();
+                        }
+                    });
+                    dialog.show();
+                }
+            }
+        });
+
+        imgEmployee.setOnClickListener(new View.OnClickListener() { //listener image view-a otvara dialog odakle se bira import path (camera / storage)
+            @Override
+            public void onClick(View v) {
+                final Dialog dialog = new Dialog(AddNewEmployeeActivity.this);
+                dialog.setContentView(R.layout.dialog_import_photo);
+                ImageButton btnCamera = (ImageButton) dialog.findViewById(R.id.btn_dialog_camera);
+                ImageButton btnStorage = (ImageButton) dialog.findViewById(R.id.btn_dialog_storage);
+                dialog.show();
+
+                btnStorage.setOnClickListener(new View.OnClickListener() { //klik na ikonicu storage-a u dialogu
+                    @Override
+                    public void onClick(View v) {
+                        importFromStorageIntent();
+                        dialog.dismiss();
+                    }
+                });
+
+                btnCamera.setOnClickListener(new View.OnClickListener() { //klik na ikonicu kamere u dialogu
+                    @Override
+                    public void onClick(View v) {
+                        importFromCameraIntent();
+                        dialog.dismiss();
+                    }
+                });
+
+            }
+        });
     }
 
 

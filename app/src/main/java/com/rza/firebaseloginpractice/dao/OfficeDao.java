@@ -71,4 +71,12 @@ public class OfficeDao {
             officeList.addAll(officeMap.values());
         }
     }
+
+    public List<Office> getOfficeList() {
+        return officeList;
+    }
+
+    public void setOfficeList(List<Office> officeList) {
+        this.officeList = officeList;
+    }
 }

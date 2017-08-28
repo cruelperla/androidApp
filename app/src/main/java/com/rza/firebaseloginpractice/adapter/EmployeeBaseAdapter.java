@@ -17,11 +17,11 @@ import java.util.ArrayList;
  * Created by Rza on 23-Aug-17.
  */
 
-public class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.EmployeeViewHolder> {
+public class EmployeeBaseAdapter extends RecyclerView.Adapter<EmployeeBaseAdapter.EmployeeViewHolder> {
 
     private ArrayList<Employee> employees = new ArrayList<>();
 
-    public BaseAdapter(){
+    public EmployeeBaseAdapter(){
 
     }
 
@@ -49,14 +49,14 @@ public class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.EmployeeViewHo
         }
     }
 
-    public class EmployeeViewHolder extends RecyclerView.ViewHolder {
+    class EmployeeViewHolder extends RecyclerView.ViewHolder {
         public TextView tvName;
         public TextView tvEmail;
         public TextView tvPosition;
         public SimpleDraweeView sdvImg;
         public TextView tvDateOfBirth;
 
-        public EmployeeViewHolder(View v) {
+        EmployeeViewHolder(View v) {
             super(v);
             tvName = (TextView)v.findViewById(R.id.tv_employee_name);
             tvEmail = (TextView) v.findViewById(R.id.tv_employee_email);
@@ -65,7 +65,7 @@ public class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.EmployeeViewHo
             tvDateOfBirth = (TextView) v.findViewById(R.id.tv_employee_birth);
         }
 
-        public void bind(Employee employee) {
+        void bind(Employee employee) {
             tvName.setText(employee.getName());
             tvDateOfBirth.setText(employee.getDate());
             tvPosition.setText(employee.getPosition());

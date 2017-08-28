@@ -100,16 +100,13 @@ public class AddNewOfficeActivity extends AppCompatActivity {
                 toast.show();
             }
         }
-        else if (requestCode == RESULT_MAPS_ACTIVITY && resultCode == RESULT_OK) {
-            if (isMapsPermissionGranted()) {
+        else if (requestCode == RESULT_MAPS_ACTIVITY && resultCode == RESULT_OK) { //otvara maps activity for result
                 String lat = data.getStringExtra("lat");
                 String lng = data.getStringExtra("lng");
                 tvLat.setText(lat);
                 tvLng.setText(lng);
-
                 office.setLat(lat);
                 office.setLng(lng);
-            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

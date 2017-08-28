@@ -69,7 +69,7 @@ public class HomeActivity extends AppCompatActivity {
         btnAssets.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(HomeActivity.this, AddNewOfficeActivity.class);
+                Intent i = new Intent(HomeActivity.this, OfficesListActivity.class);
                 startActivity(i);
             }
         });
