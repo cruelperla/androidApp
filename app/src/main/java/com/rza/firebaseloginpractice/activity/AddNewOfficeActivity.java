@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rza.firebaseloginpractice.R;
@@ -36,6 +37,8 @@ public class AddNewOfficeActivity extends AppCompatActivity {
     private static int REQUEST_LOCATION = 4;
     private Toast toast;
     private Office office;
+    private TextView tvLat;
+    private TextView tvLng;
 
 
     @Override
@@ -52,6 +55,8 @@ public class AddNewOfficeActivity extends AppCompatActivity {
         btnLocation = (ImageButton) findViewById(R.id.btn_location);
         officeImage = (ImageView) findViewById(R.id.iv_image_office);
         btnAdd = (FloatingActionButton) findViewById(R.id.fab_add_office);
+        tvLat = (TextView) findViewById(R.id.tv_lat_maps);
+        tvLng = (TextView) findViewById(R.id.tv_lng_maps);
 
         officeImage.setOnClickListener(new View.OnClickListener() { //klik na image view
             @Override
@@ -73,7 +78,7 @@ public class AddNewOfficeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(AddNewOfficeActivity.this, MapsActivity.class);
-                startActivity(i);
+                startActivityForResult(i, RESULT_MAPS_ACTIVITY);
             }
         });
 
@@ -93,6 +98,17 @@ public class AddNewOfficeActivity extends AppCompatActivity {
                 storePhoto(); //dodaje sliku na storage
                 toast = Toast.makeText(AddNewOfficeActivity.this, "Wait while image is uploading...", Toast.LENGTH_LONG);
                 toast.show();
+            }
+        }
+        else if (requestCode == RESULT_MAPS_ACTIVITY && resultCode == RESULT_OK) {
+            if (isMapsPermissionGranted()) {
+                String lat = data.getStringExtra("lat");
+                String lng = data.getStringExtra("lng");
+                tvLat.setText(lat);
+                tvLng.setText(lng);
+
+                office.setLat(lat);
+                office.setLng(lng);
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -124,10 +140,12 @@ public class AddNewOfficeActivity extends AppCompatActivity {
     public boolean isMapsPermissionGranted() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED ||
+                    ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED) {
                 // Check Permissions Now
                 ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                         REQUEST_LOCATION);
             } else {
                 return false;

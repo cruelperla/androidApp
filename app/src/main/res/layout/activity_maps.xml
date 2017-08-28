@@ -1,3 +1,6 @@
+<RelativeLayout android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,3 +9,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.rza.firebaseloginpractice.activity.MapsActivity" />
+
+    <Button
+        android:id="@+id/btn_maps_ok"
+        android:text="ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        />
+
+</RelativeLayout>
