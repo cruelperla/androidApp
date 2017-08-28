@@ -20,7 +20,6 @@ import java.util.ArrayList;
 public class OfficeAdapter extends RecyclerView.Adapter<OfficeAdapter.OfficeViewHolder> {
 
     private ArrayList<Office> offices;
-    private Context context;
     private final ListItemClickListener mOnClickListener;
 
     public interface ListItemClickListener {
@@ -90,9 +89,6 @@ public class OfficeAdapter extends RecyclerView.Adapter<OfficeAdapter.OfficeView
 
 
 
-    public void setContext(Context context) {
-        this.context = context;
-    }
 
     public void setOffices(ArrayList<Office> offices) {
         this.offices = offices;

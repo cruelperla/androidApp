@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="350dp"
+    android:layout_height="200dp">
+
+    <TextView
+        android:layout_marginTop="15dp"
+        android:text="Choose Your Action"
+        android:textAlignment="center"
+        android:textSize="22sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+  <LinearLayout
+      android:orientation="horizontal"
+      android:layout_gravity="center"
+      android:layout_marginTop="40dp"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/ib_email"
+            android:src="@drawable/ic_email_black_24dp"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:background="@android:color/transparent"
+            />
+
+        <ImageButton
+            android:id="@+id/ib_phone"
+            android:src="@drawable/ic_phone_black_24dp"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:background="@android:color/transparent"
+            />
+
+        <ImageButton
+            android:id="@+id/ib_delete"
+            android:src="@drawable/ic_delete_black_24dp"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:background="@android:color/transparent"/>
+  </LinearLayout>
+
+
+</LinearLayout>

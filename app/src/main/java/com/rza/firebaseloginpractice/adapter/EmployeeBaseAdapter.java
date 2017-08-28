@@ -64,6 +64,7 @@ public class EmployeeBaseAdapter extends RecyclerView.Adapter<EmployeeBaseAdapte
         public TextView tvPosition;
         public SimpleDraweeView sdvImg;
         public TextView tvDateOfBirth;
+        public TextView tvPhoneNumber;
 
         EmployeeViewHolder(View v) {
             super(v);
@@ -72,6 +73,7 @@ public class EmployeeBaseAdapter extends RecyclerView.Adapter<EmployeeBaseAdapte
             tvPosition = (TextView) v.findViewById(R.id.tv_employee_position);
             sdvImg= (SimpleDraweeView) v.findViewById(R.id.sdv_employee_image);
             tvDateOfBirth = (TextView) v.findViewById(R.id.tv_employee_birth);
+            tvPhoneNumber = (TextView) v.findViewById(R.id.tv_employee_phone_number);
             v.setOnLongClickListener(this);
         }
 
@@ -79,6 +81,12 @@ public class EmployeeBaseAdapter extends RecyclerView.Adapter<EmployeeBaseAdapte
             tvName.setText(employee.getName());
             tvDateOfBirth.setText(employee.getDate());
             tvPosition.setText(employee.getPosition());
+            if (employee.getNumber() != null) {
+                tvPhoneNumber.setText(employee.getNumber());
+            }
+            else {
+                tvPhoneNumber.setText("N/A");
+            }
             if (employee.getImgUri() != null) {
                 sdvImg.setImageURI(Uri.parse(employee.getImgUri()));
             }else {

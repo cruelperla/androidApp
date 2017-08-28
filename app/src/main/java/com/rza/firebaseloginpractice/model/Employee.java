@@ -13,11 +13,19 @@ public class Employee {
     private String imgUri;
     private String id;
     private String officeId;
+    private String number;
 
     public Employee() {
 
     }
 
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
 
     public String getOfficeId() {
         return officeId;

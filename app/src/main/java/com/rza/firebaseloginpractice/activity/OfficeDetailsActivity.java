@@ -1,7 +1,9 @@
 package com.rza.firebaseloginpractice.activity;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
@@ -10,13 +12,16 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.rza.firebaseloginpractice.R;
@@ -27,6 +32,8 @@ import com.rza.firebaseloginpractice.model.Office;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import es.dmoral.toasty.Toasty;
 
 public class OfficeDetailsActivity extends AppCompatActivity implements EmployeeBaseAdapter.EmployeeAdapterOnLongClickListener {
     private RecyclerView recyclerView;
@@ -99,7 +106,67 @@ public class OfficeDetailsActivity extends AppCompatActivity implements Employee
     }
 
     @Override
-    public void onLongClickListener(Employee employee) {
+    public void onLongClickListener(final Employee emp) {
+        Dialog dialog = new Dialog(OfficeDetailsActivity.this);
+        dialog.setContentView(R.layout.dialog_email_delete);
+
+        ImageButton imgEmail = (ImageButton) dialog.findViewById(R.id.ib_email);
+        ImageButton imgPhone = (ImageButton) dialog.findViewById(R.id.ib_phone);
+        ImageButton imgDelete = (ImageButton) dialog.findViewById(R.id.ib_delete);
+        dialog.show();
+
+        imgDelete.setOnClickListener(new View.OnClickListener() { //on delete listener
+            @Override
+            public void onClick(View v) {
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                HomeActivity.employeeDao.delete(emp);
+                                adapter.setEmployees(HomeActivity.employeeDao.getEmployees());
+                                Toasty.success(OfficeDetailsActivity.this, "Employee deleted!", Toast.LENGTH_SHORT, true).show();
+                                dialog.dismiss();
+                                break;
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                dialog.dismiss();
+                                break;
+                        }
+
+
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(OfficeDetailsActivity.this);
+                builder.setMessage("Are you sure you want to delete this employee?")
+                        .setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener)
+                        .show();
+            }
+        });
+
+        imgPhone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_DIAL);
+                i.setData(Uri.parse("tel:" + emp.getNumber()));
+                startActivity(i);
+            }
+        });
+
+
+
+        imgEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = emp.getEmail();
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", email, null));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
+                startActivity(Intent.createChooser(emailIntent, "Send Email..."));
+            }
+        });
+
 
     }
 

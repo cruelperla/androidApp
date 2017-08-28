@@ -53,6 +53,7 @@ public class AddNewEmployeeActivity extends AppCompatActivity {
     private static int MY_PERMISSION_CAMERA = 5;
     private Toasty toasty;
     private Spinner officesSpinner;
+    private EditText etNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +72,7 @@ public class AddNewEmployeeActivity extends AppCompatActivity {
         etPosition.setText("");
         etDate.setText("");
         imgEmployee.setImageResource(R.drawable.add_image);
+        etNumber.setText("+381");
     }
 
     @Override
@@ -164,6 +166,7 @@ public class AddNewEmployeeActivity extends AppCompatActivity {
         etDate = (EditText) findViewById(R.id.et_employee_date_of_birth);
         imgEmployee = (ImageView) findViewById(R.id.iv_employee_image);
         btnAdd = (FloatingActionButton) findViewById(R.id.btn_add_employee);
+        etNumber = (EditText) findViewById(R.id.et_phone_number);
         etName.requestFocus();
 
 
@@ -199,6 +202,7 @@ public class AddNewEmployeeActivity extends AppCompatActivity {
                     Toast.makeText(AddNewEmployeeActivity.this, "Please Fill All Necessary Fields", Toast.LENGTH_SHORT).show();
                 }
                 else {
+                    employee.setNumber(etNumber.getText().toString());
                     employee.setOfficeId(officeIds.get(officesSpinner.getSelectedItemPosition()));
                     HomeActivity.employeeDao.write(employee); //upisivanje u bazu
                     HomeActivity.employeeDao.getEmployees().add(employee); //upisuje zaposlenog u array listu

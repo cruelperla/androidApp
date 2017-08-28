@@ -3,6 +3,7 @@ package com.rza.firebaseloginpractice.activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.rza.firebaseloginpractice.R;
@@ -53,9 +54,21 @@ public class EmployeesListActivity extends AppCompatActivity implements Employee
 
     }
 
+
     @Override
     public void onLongClickListener(final Employee employee) {
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+        Dialog dialog = new Dialog(EmployeesListActivity.this);
+        dialog.setContentView(R.layout.dialog_email_delete);
+
+        ImageButton imgEmail = (ImageButton) dialog.findViewById(R.id.ib_email);
+        ImageButton imgPhone = (ImageButton) dialog.findViewById(R.id.ib_phone);
+        ImageButton imgDelete = (ImageButton) dialog.findViewById(R.id.ib_delete);
+        dialog.show();
+
+        imgDelete.setOnClickListener(new View.OnClickListener() { //on delete listener
+            @Override
+            public void onClick(View v) {
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
@@ -63,10 +76,8 @@ public class EmployeesListActivity extends AppCompatActivity implements Employee
                         HomeActivity.employeeDao.delete(employee);
                         adapter.setEmployees(HomeActivity.employeeDao.getEmployees());
                         Toasty.success(EmployeesListActivity.this, "Employee deleted!", Toast.LENGTH_SHORT, true).show();
-
                         dialog.dismiss();
                         break;
-
                     case DialogInterface.BUTTON_NEGATIVE:
                         dialog.dismiss();
                         break;
@@ -76,13 +87,39 @@ public class EmployeesListActivity extends AppCompatActivity implements Employee
             }
         };
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(EmployeesListActivity.this);
         builder.setMessage("Are you sure you want to delete this employee?")
                 .setPositiveButton("Yes", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener)
                 .show();
-        HomeActivity.employeeDao.delete(employee);
+            }
+        });
+
+        imgPhone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_DIAL);
+                i.setData(Uri.parse("tel:" + employee.getNumber()));
+                startActivity(i);
+            }
+        });
+
+
+
+        imgEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = employee.getEmail();
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", email, null));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
+                startActivity(Intent.createChooser(emailIntent, "Send Email..."));
+            }
+        });
+
+
     }
+
 
 
 
