@@ -1,9 +1,13 @@
 package com.rza.firebaseloginpractice.activity;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,15 +15,20 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.rza.firebaseloginpractice.R;
 import com.rza.firebaseloginpractice.adapter.EmployeeBaseAdapter;
 import com.rza.firebaseloginpractice.adapter.EmployeeGridAdapterEmployee;
 import com.rza.firebaseloginpractice.adapter.EmployeeLinearAdapterEmployee;
+import com.rza.firebaseloginpractice.model.Employee;
 
 import java.util.Collections;
 
-public class EmployeesListActivity extends AppCompatActivity {
+import es.dmoral.toasty.Toasty;
+
+public class EmployeesListActivity extends AppCompatActivity implements EmployeeBaseAdapter.EmployeeAdapterOnLongClickListener{
 
     private RecyclerView recyclerView;
     private EmployeeBaseAdapter adapter;
@@ -29,16 +38,55 @@ public class EmployeesListActivity extends AppCompatActivity {
 
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employees_list);
+        adapter = new EmployeeBaseAdapter(this);
         recyclerView = (RecyclerView) findViewById(R.id.rv_employees);
         fab = (FloatingActionButton) findViewById(R.id.fab_add_employee);
         gridListCounter = 1;
         afterViews();
+
+
+
+
     }
+
+    @Override
+    public void onLongClickListener(final Employee employee) {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        HomeActivity.employeeDao.delete(employee);
+                        adapter.setEmployees(HomeActivity.employeeDao.getEmployees());
+                        Toasty.success(EmployeesListActivity.this, "Employee deleted!", Toast.LENGTH_SHORT, true).show();
+
+                        dialog.dismiss();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+
+
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you want to delete this employee?")
+                .setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener)
+                .show();
+        HomeActivity.employeeDao.delete(employee);
+
+
+
+    }
+
 
 
 
@@ -72,7 +120,7 @@ public class EmployeesListActivity extends AppCompatActivity {
             if (gridListCounter == 1) {
                 gridListCounter = 2;
                 adapter = null;
-                adapter = new EmployeeGridAdapterEmployee();
+                adapter = new EmployeeGridAdapterEmployee(this);
                 adapter.setEmployees(HomeActivity.employeeDao.getEmployees());
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
                 recyclerView.setAdapter(adapter);
@@ -84,10 +132,12 @@ public class EmployeesListActivity extends AppCompatActivity {
                 gridListCounter = 1;
                 LinearLayoutManager layoutManager = new LinearLayoutManager(this);
                 adapter = null;
-                adapter = new EmployeeLinearAdapterEmployee();
+                adapter = new EmployeeLinearAdapterEmployee(this);
                 adapter.setEmployees(HomeActivity.employeeDao.getEmployees());
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(layoutManager);
+                DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), layoutManager.getOrientation());
+                recyclerView.addItemDecoration(dividerItemDecoration);
                 item.setIcon(R.drawable.ic_grid_on_black_24dp);
             }
         }
@@ -95,7 +145,7 @@ public class EmployeesListActivity extends AppCompatActivity {
     }
 
     private void afterViews() {
-        adapter = new EmployeeLinearAdapterEmployee();
+        adapter = new EmployeeLinearAdapterEmployee(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);

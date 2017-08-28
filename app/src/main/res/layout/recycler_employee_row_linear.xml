@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
-    android:background="@color/divider"
     android:padding="5dp"
+    android:background="@color/primary"
     android:layout_margin="10dp"
     android:layout_width="match_parent"
-    android:layout_height="150dp">
+    android:layout_height="wrap_content">
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp">
+
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/sdv_employee_image"
@@ -50,5 +58,6 @@
             android:text="22/12/1993"/>
 
     </LinearLayout>
+    </android.support.v7.widget.CardView>
 
 </LinearLayout>

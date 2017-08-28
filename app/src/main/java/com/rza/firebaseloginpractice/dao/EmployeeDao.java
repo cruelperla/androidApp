@@ -107,4 +107,9 @@ public class EmployeeDao {
         return employeesOffice;
     }
 
+    public void delete(Employee employee) {
+        DatabaseReference reference = database.getReference(TAG_EMPLOYEES).child(employee.getId());
+        reference.removeValue();
+    }
+
 }

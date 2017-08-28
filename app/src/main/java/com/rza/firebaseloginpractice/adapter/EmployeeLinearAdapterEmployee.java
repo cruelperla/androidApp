@@ -13,6 +13,11 @@ import com.rza.firebaseloginpractice.R;
 
 public class EmployeeLinearAdapterEmployee extends EmployeeBaseAdapter {
 
+
+    public EmployeeLinearAdapterEmployee(EmployeeAdapterOnLongClickListener listener) {
+        super(listener);
+    }
+
     @Override
     public EmployeeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();

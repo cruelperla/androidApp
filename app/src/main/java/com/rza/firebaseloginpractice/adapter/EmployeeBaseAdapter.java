@@ -19,10 +19,19 @@ import java.util.ArrayList;
 
 public class EmployeeBaseAdapter extends RecyclerView.Adapter<EmployeeBaseAdapter.EmployeeViewHolder> {
 
+
+
     private ArrayList<Employee> employees = new ArrayList<>();
 
-    public EmployeeBaseAdapter(){
+    final private EmployeeAdapterOnLongClickListener onLongClickListener;
 
+
+    public interface EmployeeAdapterOnLongClickListener {
+        void onLongClickListener(Employee employee);
+    }
+
+    public EmployeeBaseAdapter(EmployeeAdapterOnLongClickListener listener) {
+        this.onLongClickListener = listener;
     }
 
 
@@ -49,7 +58,7 @@ public class EmployeeBaseAdapter extends RecyclerView.Adapter<EmployeeBaseAdapte
         }
     }
 
-    class EmployeeViewHolder extends RecyclerView.ViewHolder {
+    class EmployeeViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
         public TextView tvName;
         public TextView tvEmail;
         public TextView tvPosition;
@@ -63,6 +72,7 @@ public class EmployeeBaseAdapter extends RecyclerView.Adapter<EmployeeBaseAdapte
             tvPosition = (TextView) v.findViewById(R.id.tv_employee_position);
             sdvImg= (SimpleDraweeView) v.findViewById(R.id.sdv_employee_image);
             tvDateOfBirth = (TextView) v.findViewById(R.id.tv_employee_birth);
+            v.setOnLongClickListener(this);
         }
 
         void bind(Employee employee) {
@@ -78,9 +88,12 @@ public class EmployeeBaseAdapter extends RecyclerView.Adapter<EmployeeBaseAdapte
             tvEmail.setText(employee.getEmail());
         }
 
-
-
-
+        @Override
+        public boolean onLongClick(View v) {
+            onLongClickListener.onLongClickListener(employees.get(getAdapterPosition()));
+            notifyDataSetChanged();
+            return true;
+        }
     }
 
     public void setEmployees(ArrayList employees) {

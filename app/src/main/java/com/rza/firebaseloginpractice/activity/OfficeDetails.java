@@ -17,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.google.android.gms.location.LocationListener;
 import com.rza.firebaseloginpractice.R;
 import com.rza.firebaseloginpractice.adapter.EmployeeBaseAdapter;
 import com.rza.firebaseloginpractice.adapter.EmployeeLinearAdapterEmployee;
@@ -28,7 +27,7 @@ import java.util.ArrayList;
 
 import es.dmoral.toasty.Toasty;
 
-public class OfficeDetails extends AppCompatActivity {
+public class OfficeDetails extends AppCompatActivity implements EmployeeBaseAdapter.EmployeeAdapterOnLongClickListener {
     private RecyclerView recyclerView;
     private EmployeeBaseAdapter adapter;
     private TextView tvName;
@@ -48,6 +47,12 @@ public class OfficeDetails extends AppCompatActivity {
         tvName = (TextView) findViewById(R.id.tv_office_name_details);
         sdvImage = (SimpleDraweeView) findViewById(R.id.sdv_office_image_details);
         ivNavigation = (ImageView) findViewById(R.id.iv_navigation_image);
+
+        LocationManager locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+        String provider = locationManager.getBestProvider(criteria, true);
+        final Location location = locationManager.getLastKnownLocation(provider);
 
 
 
@@ -76,11 +81,6 @@ public class OfficeDetails extends AppCompatActivity {
             public void onClick(View v) {
                 if (lat != null && lng != null) {
                     try {
-                        final LocationManager locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
-                        final Criteria criteria = new Criteria();
-                        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-                        final String provider = locationManager.getBestProvider(criteria, false);
-                        final Location location = locationManager.getLastKnownLocation(provider);
                         userLat = String.valueOf(location.getLatitude());
                         userLng = String.valueOf(location.getLongitude());
                     }
@@ -102,9 +102,14 @@ public class OfficeDetails extends AppCompatActivity {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView = (RecyclerView) findViewById(R.id.rv_employees_office_details);
-        adapter = new EmployeeLinearAdapterEmployee();
+        adapter = new EmployeeLinearAdapterEmployee(this);
         adapter.setEmployees(employees);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
+    }
+
+    @Override
+    public void onLongClickListener(Employee employee) {
+
     }
 }
