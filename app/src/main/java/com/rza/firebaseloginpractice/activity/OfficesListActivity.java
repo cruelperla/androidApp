@@ -13,7 +13,7 @@ import com.rza.firebaseloginpractice.adapter.OfficeAdapter;
 
 import java.util.ArrayList;
 
-public class OfficesListActivity extends AppCompatActivity {
+public class OfficesListActivity extends AppCompatActivity implements OfficeAdapter.ListItemClickListener {
     private RecyclerView recyclerView;
     private OfficeAdapter adapter;
     private FloatingActionButton fabAddOffice;
@@ -39,11 +39,19 @@ public class OfficesListActivity extends AppCompatActivity {
         });
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        adapter = new OfficeAdapter();
+        adapter = new OfficeAdapter(this);
         adapter.setOffices((ArrayList)HomeActivity.officeDao.getOfficeList());
 
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
     }
 
+    @Override
+    public void onListItemClick(int index) {
+        Intent i = new Intent(this, OfficeDetails.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("office", HomeActivity.officeDao.getOfficeList().get(index));
+        i.putExtras(bundle);
+        startActivity(i);
+    }
 }

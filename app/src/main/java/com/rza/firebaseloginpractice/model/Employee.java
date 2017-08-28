@@ -1,8 +1,5 @@
 package com.rza.firebaseloginpractice.model;
 
-import android.support.annotation.NonNull;
-
-import java.util.Comparator;
 
 /**
  * Created by Rza on 24-Aug-17.
@@ -16,19 +13,11 @@ public class Employee {
     private String imgUri;
     private String id;
     private String officeId;
-    private Office office;
 
     public Employee() {
 
     }
 
-    public Office getOffice() {
-        return office;
-    }
-
-    public void setOffice(Office office) {
-        this.office = office;
-    }
 
     public String getOfficeId() {
         return officeId;

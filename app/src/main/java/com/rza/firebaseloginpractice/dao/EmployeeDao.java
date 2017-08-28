@@ -89,7 +89,7 @@ public class EmployeeDao {
                     return o1.getName().compareTo(o2.getName());
                 }
             });
-            Log.d(TAG, "PUBLISHED");
+            Log.d(TAG, "Published" + String.valueOf(employees.size()));
         }
     }
     public ArrayList<Employee> getEmployees() {
@@ -97,5 +97,14 @@ public class EmployeeDao {
         return employees;
     }
 
+    public ArrayList<Employee> getEmployeesByOfficeId(String officeId) {
+        ArrayList<Employee> employeesOffice = new ArrayList<>();
+        for (Employee employee: employees) {
+            if (employee.getOfficeId() != null)
+                if (employee.getOfficeId().equals(officeId))
+                    employeesOffice.add(employee);
+            }
+        return employeesOffice;
+    }
 
 }

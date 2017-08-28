@@ -1,10 +1,14 @@
 package com.rza.firebaseloginpractice.model;
 
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
 /**
  * Created by Rza on 26-Aug-17.
  */
 
-public class Office {
+public class Office implements Serializable {
 
     private String id;
     private String name;

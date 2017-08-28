@@ -1,6 +1,10 @@
 package com.rza.firebaseloginpractice.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +13,8 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.rza.firebaseloginpractice.R;
+import com.rza.firebaseloginpractice.activity.OfficeDetails;
+import com.rza.firebaseloginpractice.activity.OfficesListActivity;
 import com.rza.firebaseloginpractice.model.Office;
 
 import java.util.ArrayList;
@@ -20,7 +26,16 @@ import java.util.ArrayList;
 public class OfficeAdapter extends RecyclerView.Adapter<OfficeAdapter.OfficeViewHolder> {
 
     private ArrayList<Office> offices;
+    private Context context;
+    private final ListItemClickListener mOnClickListener;
 
+    public interface ListItemClickListener {
+        void onListItemClick(int index);
+    }
+
+    public OfficeAdapter(ListItemClickListener listener) {
+        this.mOnClickListener = listener;
+    }
 
 
     @Override
@@ -51,7 +66,7 @@ public class OfficeAdapter extends RecyclerView.Adapter<OfficeAdapter.OfficeView
         }
     }
 
-    public class OfficeViewHolder extends RecyclerView.ViewHolder {
+    public class OfficeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView tvName;
         SimpleDraweeView sdvOfficeImage;
 
@@ -59,7 +74,9 @@ public class OfficeAdapter extends RecyclerView.Adapter<OfficeAdapter.OfficeView
             super(v);
             tvName = (TextView) v.findViewById(R.id.tv_office_name);
             sdvOfficeImage = (SimpleDraweeView) v.findViewById(R.id.sdv_office_image);
+            v.setOnClickListener(this);
         }
+
 
         void bind(Office office) {
             tvName.setText(office.getName());
@@ -71,9 +88,17 @@ public class OfficeAdapter extends RecyclerView.Adapter<OfficeAdapter.OfficeView
             }
         }
 
+        @Override
+        public void onClick(View v) {
+            mOnClickListener.onListItemClick(getAdapterPosition());
+        }
     }
 
 
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
 
     public void setOffices(ArrayList<Office> offices) {
         this.offices = offices;
