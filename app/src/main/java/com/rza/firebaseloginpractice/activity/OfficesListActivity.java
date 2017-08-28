@@ -48,7 +48,7 @@ public class OfficesListActivity extends AppCompatActivity implements OfficeAdap
 
     @Override
     public void onListItemClick(int index) {
-        Intent i = new Intent(this, OfficeDetails.class);
+        Intent i = new Intent(this, OfficeDetailsActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("office", HomeActivity.officeDao.getOfficeList().get(index));
         i.putExtras(bundle);

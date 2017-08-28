@@ -1,10 +1,6 @@
 package com.rza.firebaseloginpractice.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +9,6 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.rza.firebaseloginpractice.R;
-import com.rza.firebaseloginpractice.activity.OfficeDetails;
-import com.rza.firebaseloginpractice.activity.OfficesListActivity;
 import com.rza.firebaseloginpractice.model.Office;
 
 import java.util.ArrayList;

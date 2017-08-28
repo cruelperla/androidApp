@@ -52,7 +52,7 @@
             android:name=".activity.MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity android:name=".activity.OfficesListActivity" />
-        <activity android:name=".activity.OfficeDetails"></activity>
+        <activity android:name=".activity.OfficeDetailsActivity"></activity>
     </application>
 
 </manifest>

@@ -82,9 +82,6 @@ public class EmployeesListActivity extends AppCompatActivity implements Employee
                 .setNegativeButton("No", dialogClickListener)
                 .show();
         HomeActivity.employeeDao.delete(employee);
-
-
-
     }
 
 

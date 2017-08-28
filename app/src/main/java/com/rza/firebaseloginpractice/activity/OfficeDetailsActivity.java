@@ -1,11 +1,14 @@
 package com.rza.firebaseloginpractice.activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,7 +17,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.rza.firebaseloginpractice.R;
@@ -24,10 +26,9 @@ import com.rza.firebaseloginpractice.model.Employee;
 import com.rza.firebaseloginpractice.model.Office;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import es.dmoral.toasty.Toasty;
-
-public class OfficeDetails extends AppCompatActivity implements EmployeeBaseAdapter.EmployeeAdapterOnLongClickListener {
+public class OfficeDetailsActivity extends AppCompatActivity implements EmployeeBaseAdapter.EmployeeAdapterOnLongClickListener {
     private RecyclerView recyclerView;
     private EmployeeBaseAdapter adapter;
     private TextView tvName;
@@ -38,7 +39,11 @@ public class OfficeDetails extends AppCompatActivity implements EmployeeBaseAdap
     private String lng;
     private String userLat;
     private String userLng;
-    private static int REQUEST_MAPS_PERMISSION = 4;
+    private static final int PERMISSION_REQUEST_ACCESS_LOCATION = 55;
+    private LocationManager locationManager;
+    private Criteria criteria;
+    private String providers;
+    private Location location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +53,6 @@ public class OfficeDetails extends AppCompatActivity implements EmployeeBaseAdap
         sdvImage = (SimpleDraweeView) findViewById(R.id.sdv_office_image_details);
         ivNavigation = (ImageView) findViewById(R.id.iv_navigation_image);
 
-        LocationManager locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-        String provider = locationManager.getBestProvider(criteria, true);
-        final Location location = locationManager.getLastKnownLocation(provider);
 
 
 
@@ -79,24 +79,14 @@ public class OfficeDetails extends AppCompatActivity implements EmployeeBaseAdap
         ivNavigation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (lat != null && lng != null) {
-                    try {
-                        userLat = String.valueOf(location.getLatitude());
-                        userLng = String.valueOf(location.getLongitude());
-                    }
-                    catch (SecurityException | IllegalArgumentException e) {
-                        e.printStackTrace();
-                        ActivityCompat.requestPermissions(OfficeDetails.this,
-                                new String[] {Manifest.permission.ACCESS_COARSE_LOCATION,
-                                Manifest.permission.ACCESS_FINE_LOCATION},
-                                REQUEST_MAPS_PERMISSION);
-                    }
-
-
-                    Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                            Uri.parse("http://maps.google.com/maps?saddr=" + userLat + "," + userLng + "&daddr=" + lat + "," + lng));
-                    startActivity(intent);
+                if (ActivityCompat.checkSelfPermission(OfficeDetailsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                        ActivityCompat.checkSelfPermission(OfficeDetailsActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(OfficeDetailsActivity.this,
+                            new String[] {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_ACCESS_LOCATION);
                 }
+                driveToCoordinate();
+
+
             }
         });
 
@@ -111,5 +101,55 @@ public class OfficeDetails extends AppCompatActivity implements EmployeeBaseAdap
     @Override
     public void onLongClickListener(Employee employee) {
 
+    }
+
+    private void driveToCoordinate() {
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        criteria = new Criteria();
+        location = getBestKnownLocation();
+        if (lat != null && lng != null) {
+            userLat = String.valueOf(location.getLatitude());
+            userLng = String.valueOf(location.getLongitude());
+
+
+
+            Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                    Uri.parse("http://maps.google.com/maps?saddr=" + userLat + "," + userLng + "&daddr=" + lat + "," + lng));
+            startActivity(intent);
+        }
+
+    }
+
+    private Location getBestKnownLocation() {
+
+            locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+            List<String> providers = locationManager.getProviders(true);
+            Location bestLocation = null;
+
+            for (String provider : providers) {
+                Location l = locationManager.getLastKnownLocation(provider);
+
+
+                if (l == null) {
+                    continue;
+                }
+
+                if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                    bestLocation = l;
+                }
+            }
+            return bestLocation;
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_ACCESS_LOCATION: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    driveToCoordinate();
+                }
+            }
+        }
     }
 }
