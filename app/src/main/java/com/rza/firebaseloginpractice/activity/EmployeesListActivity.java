@@ -48,22 +48,18 @@ public class EmployeesListActivity extends AppCompatActivity implements Employee
         fab = (FloatingActionButton) findViewById(R.id.fab_add_employee);
         gridListCounter = 1;
         afterViews();
-
-
-
-
     }
 
 
     @Override
     public void onLongClickListener(final Employee employee) {
-        Dialog dialog = new Dialog(EmployeesListActivity.this);
-        dialog.setContentView(R.layout.dialog_email_delete);
+        final Dialog d = new Dialog(EmployeesListActivity.this);
+        d.setContentView(R.layout.dialog_email_delete);
 
-        ImageButton imgEmail = (ImageButton) dialog.findViewById(R.id.ib_email);
-        ImageButton imgPhone = (ImageButton) dialog.findViewById(R.id.ib_phone);
-        ImageButton imgDelete = (ImageButton) dialog.findViewById(R.id.ib_delete);
-        dialog.show();
+        ImageButton imgEmail = (ImageButton) d.findViewById(R.id.ib_email);
+        ImageButton imgPhone = (ImageButton) d.findViewById(R.id.ib_phone);
+        ImageButton imgDelete = (ImageButton) d.findViewById(R.id.ib_delete);
+        d.show();
 
         imgDelete.setOnClickListener(new View.OnClickListener() { //on delete listener
             @Override
@@ -75,11 +71,13 @@ public class EmployeesListActivity extends AppCompatActivity implements Employee
                     case DialogInterface.BUTTON_POSITIVE:
                         HomeActivity.employeeDao.delete(employee);
                         adapter.setEmployees(HomeActivity.employeeDao.getEmployees());
-                        Toasty.success(EmployeesListActivity.this, "Employee deleted!", Toast.LENGTH_SHORT, true).show();
+                        Toasty.warning(EmployeesListActivity.this, "Employee deleted!", Toast.LENGTH_SHORT, true).show();
                         dialog.dismiss();
+                        d.dismiss();
                         break;
                     case DialogInterface.BUTTON_NEGATIVE:
                         dialog.dismiss();
+                        d.dismiss();
                         break;
                 }
 

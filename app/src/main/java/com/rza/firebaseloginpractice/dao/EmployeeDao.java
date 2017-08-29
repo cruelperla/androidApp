@@ -116,7 +116,7 @@ public class EmployeeDao {
     public void deleteByOfficeId(Office office) {
 
         for (Employee employee : employees) {
-            if (office.getId() == employee.getOfficeId()) {
+            if (office.getId().equals(employee.getOfficeId()) ) {
                 DatabaseReference reference = database.getReference(TAG_EMPLOYEES).child(employee.getId());
                 reference.removeValue();
             }
