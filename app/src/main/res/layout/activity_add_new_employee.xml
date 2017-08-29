@@ -91,6 +91,7 @@
             android:id="@+id/et_phone_number"
             android:text="+381"
             android:textSize="14sp"
+            android:inputType="number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -172,6 +173,7 @@
         android:layout_width="150dp"
         android:layout_marginTop="50dp"
         android:layout_height="150dp"
+        android:contentDescription="No idea what this is"
         android:src="@drawable/add_image"
         android:layout_gravity="center_horizontal"/>
 
@@ -183,8 +185,8 @@
         android:src="@drawable/plus"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="16dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"/>
     </RelativeLayout>
 

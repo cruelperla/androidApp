@@ -9,6 +9,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.rza.firebaseloginpractice.model.Employee;
+import com.rza.firebaseloginpractice.model.Office;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -111,5 +112,6 @@ public class EmployeeDao {
         DatabaseReference reference = database.getReference(TAG_EMPLOYEES).child(employee.getId());
         reference.removeValue();
     }
+
 
 }

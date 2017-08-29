@@ -17,6 +17,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -51,6 +54,7 @@ public class OfficeDetailsActivity extends AppCompatActivity implements Employee
     private Criteria criteria;
     private String providers;
     private Location location;
+    private Office office;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +69,7 @@ public class OfficeDetailsActivity extends AppCompatActivity implements Employee
 
         Intent i = getIntent();
         Bundle bundle = i.getExtras();
-        Office office = (Office)bundle.getSerializable("office");
+        office = (Office)bundle.getSerializable("office");
         String officeName = office.getName();
         String imgUri = office.getImgUrl();
         String officeId = office.getId();
@@ -208,6 +212,46 @@ public class OfficeDetailsActivity extends AppCompatActivity implements Employee
             return bestLocation;
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_office_details, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.menu_details_delete) {
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                        case DialogInterface.BUTTON_POSITIVE:
+                            HomeActivity.officeDao.delete(office);
+                            Toasty.success(OfficeDetailsActivity.this, "Office deleted!", Toast.LENGTH_SHORT, true).show();
+                            dialog.dismiss();
+                            Intent i = new Intent(OfficeDetailsActivity.this, OfficesListActivity.class);
+                            startActivity(i);
+                            break;
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            dialog.dismiss();
+                            break;
+                    }
+
+
+                }
+            };
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(OfficeDetailsActivity.this);
+            builder.setMessage("Are you sure you want to delete this office?")
+                    .setPositiveButton("Yes", dialogClickListener)
+                    .setNegativeButton("No", dialogClickListener)
+                    .show();
+        }
+        return true;
+        }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

@@ -6,6 +6,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
+import com.rza.firebaseloginpractice.activity.HomeActivity;
 import com.rza.firebaseloginpractice.model.Office;
 
 import java.util.ArrayList;
@@ -30,6 +31,9 @@ public class OfficeDao {
     private Map<String, Office> officeMap = new HashMap<>();
 
     private static OfficeDao instance = null;
+
+    private EmployeeDao employeeDao = new EmployeeDao();
+
 
     protected OfficeDao() {
 
@@ -74,6 +78,11 @@ public class OfficeDao {
 
     public List<Office> getOfficeList() {
         return officeList;
+    }
+
+    public void delete(Office office) {
+        DatabaseReference reference = database.getReference(TAG_OFFICES).child(office.getId());
+        reference.removeValue();
     }
 
     public void setOfficeList(List<Office> officeList) {

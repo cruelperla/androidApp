@@ -193,4 +193,5 @@ public class EmployeesListActivity extends AppCompatActivity implements Employee
         });
         adapter.setEmployees(HomeActivity.employeeDao.getEmployees());
     }
+
 }
