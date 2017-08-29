@@ -230,6 +230,7 @@ public class OfficeDetailsActivity extends AppCompatActivity implements Employee
                     switch (which) {
                         case DialogInterface.BUTTON_POSITIVE:
                             HomeActivity.officeDao.delete(office);
+                            HomeActivity.employeeDao.deleteByOfficeId(office);
                             Toasty.success(OfficeDetailsActivity.this, "Office deleted!", Toast.LENGTH_SHORT, true).show();
                             dialog.dismiss();
                             Intent i = new Intent(OfficeDetailsActivity.this, OfficesListActivity.class);

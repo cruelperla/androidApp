@@ -72,12 +72,11 @@ public class EmployeeDao {
         DatabaseReference reference = database.getReference(TAG_EMPLOYEES);
         Log.d("reference", reference.toString());
 
-            reference = reference.push();
-            employee.setId(reference.getKey());
-            reference.setValue(employee);
+        reference = reference.push();
+        employee.setId(reference.getKey());
+        reference.setValue(employee);
 
     }
-
 
 
     private void publish() { //sve zaposlene iz mape smesta u listu, zove ga init
@@ -93,6 +92,7 @@ public class EmployeeDao {
             Log.d(TAG, "Published" + String.valueOf(employees.size()));
         }
     }
+
     public ArrayList<Employee> getEmployees() {
         Log.d("getEmployee", employees.toString());
         return employees;
@@ -100,11 +100,11 @@ public class EmployeeDao {
 
     public ArrayList<Employee> getEmployeesByOfficeId(String officeId) {
         ArrayList<Employee> employeesOffice = new ArrayList<>();
-        for (Employee employee: employees) {
+        for (Employee employee : employees) {
             if (employee.getOfficeId() != null)
                 if (employee.getOfficeId().equals(officeId))
                     employeesOffice.add(employee);
-            }
+        }
         return employeesOffice;
     }
 
@@ -113,5 +113,13 @@ public class EmployeeDao {
         reference.removeValue();
     }
 
+    public void deleteByOfficeId(Office office) {
 
+        for (Employee employee : employees) {
+            if (office.getId() == employee.getOfficeId()) {
+                DatabaseReference reference = database.getReference(TAG_EMPLOYEES).child(employee.getId());
+                reference.removeValue();
+            }
+        }
+    }
 }
