@@ -39,7 +39,7 @@ public class HomeActivity extends AppCompatActivity {
     static OfficeDao officeDao;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) { //create this activity if logged in, otherwise raise login activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         afterViews();
@@ -47,7 +47,7 @@ public class HomeActivity extends AppCompatActivity {
         employeeDao = EmployeeDao.getInstance();
         officeDao = OfficeDao.getInstance();
 
-        employeeDao.init();
+        employeeDao.init(); //initializes both daos
         officeDao.init();
 
 
@@ -61,7 +61,7 @@ public class HomeActivity extends AppCompatActivity {
                 .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
                     @Override
                     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+                        Toasty.error(HomeActivity.this, "Connection failed!", Toast.LENGTH_SHORT, true).show();
                     }
                 })
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
@@ -91,7 +91,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
-    private void populateViews() {
+    private void populateViews() { //iz intenta uzima podatke i populise viewove
         intent = getIntent();
         String imageUri = intent.getStringExtra("image");
         String name = intent.getStringExtra("name");
@@ -103,7 +103,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu) { //inflates menu
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_home, menu);
         return true;
@@ -111,7 +111,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) { //firebase sign out
         int id = item.getItemId();
         if (id == R.id.menu_sign_out) {
             FirebaseAuth.getInstance().signOut();
@@ -129,7 +129,7 @@ public class HomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void afterViews() {
+    public void afterViews() { //view inject
         sdvImage = (SimpleDraweeView) findViewById(R.id.sdv_user_image_home);
         btnAssets = (Button) findViewById(R.id.btn_assets);
         btnEmployees = (Button) findViewById(R.id.btn_employees);

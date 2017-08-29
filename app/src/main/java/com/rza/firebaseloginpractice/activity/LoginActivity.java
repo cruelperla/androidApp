@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
                 FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
 
-                if (firebaseUser != null) {
+                if (firebaseUser != null) { //ako user nije null otvara homeactivity
                     btnSignIn.setVisibility(View.GONE);
                     User user = new User(firebaseUser.getUid(), firebaseUser.getDisplayName(),
                             firebaseUser.getPhotoUrl(), firebaseUser.getEmail(), null);

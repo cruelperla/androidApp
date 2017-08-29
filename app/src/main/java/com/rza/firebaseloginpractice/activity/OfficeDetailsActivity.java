@@ -90,12 +90,14 @@ public class OfficeDetailsActivity extends AppCompatActivity implements Employee
         ivNavigation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ActivityCompat.checkSelfPermission(OfficeDetailsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                        ActivityCompat.checkSelfPermission(OfficeDetailsActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(OfficeDetailsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED &&
+                        ActivityCompat.checkSelfPermission(OfficeDetailsActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                                PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(OfficeDetailsActivity.this,
                             new String[] {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_ACCESS_LOCATION);
                 }
-                driveToCoordinate();
+                driveToCoordinate(); //poziva metodu koja otvara navigaciju za datim koordinatama
 
 
             }
@@ -110,7 +112,7 @@ public class OfficeDetailsActivity extends AppCompatActivity implements Employee
     }
 
     @Override
-    public void onLongClickListener(final Employee emp) {
+    public void onLongClickListener(final Employee emp) { //isti onlong click za brisanje, poziv, mejl
         Dialog dialog = new Dialog(OfficeDetailsActivity.this);
         dialog.setContentView(R.layout.dialog_email_delete);
 
@@ -174,7 +176,7 @@ public class OfficeDetailsActivity extends AppCompatActivity implements Employee
 
     }
 
-    private void driveToCoordinate() {
+    private void driveToCoordinate() { //otvara intent za navigaciju od mesta usera do offica
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         criteria = new Criteria();
         location = getBestKnownLocation();
@@ -191,7 +193,7 @@ public class OfficeDetailsActivity extends AppCompatActivity implements Employee
 
     }
 
-    private Location getBestKnownLocation() {
+    private Location getBestKnownLocation() { //nalazi najbolju lokaciju telefona
 
             locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
             List<String> providers = locationManager.getProviders(true);
@@ -214,14 +216,14 @@ public class OfficeDetailsActivity extends AppCompatActivity implements Employee
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu) {//inflatuje menu
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_office_details, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {//handluje klik menu itema (delete)
         int id = item.getItemId();
         if (id == R.id.menu_details_delete) {
             DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {

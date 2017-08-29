@@ -50,7 +50,7 @@ public class AddNewOfficeActivity extends AppCompatActivity {
     }
 
 
-    public void afterViews() {
+    public void afterViews() { //view inject
         etOfficeName = (EditText) findViewById(R.id.et_office_name_add);
         btnLocation = (ImageButton) findViewById(R.id.btn_location);
         officeImage = (ImageView) findViewById(R.id.iv_image_office);
@@ -83,7 +83,7 @@ public class AddNewOfficeActivity extends AppCompatActivity {
 
         btnLocation.setOnClickListener(new View.OnClickListener() { //otvara maps activity
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) { //otvara mapu na lokaciju telefona
                 Intent i = new Intent(AddNewOfficeActivity.this, MapsActivity.class);
                 startActivityForResult(i, RESULT_MAPS_ACTIVITY);
             }
@@ -91,7 +91,7 @@ public class AddNewOfficeActivity extends AppCompatActivity {
 
     }
 
-    public void importFromStorageIntent() {
+    public void importFromStorageIntent() { //zove intent za import sa storage-a
         Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(i, RESULT_LOAD_IMAGE);
     }
@@ -140,7 +140,7 @@ public class AddNewOfficeActivity extends AppCompatActivity {
         return false;
     }
 
-    public boolean isMapsPermissionGranted() {
+    public boolean isMapsPermissionGranted() { //proverava permission za mape
         if (Build.VERSION.SDK_INT >= 23) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED ||
@@ -170,7 +170,7 @@ public class AddNewOfficeActivity extends AppCompatActivity {
         });
     }
 
-    public void clearViews() {
+    public void clearViews() { //clears views
         etOfficeName.setText("");
         tvLat.setText("");
         tvLng.setText("");

@@ -36,6 +36,8 @@ public class EmployeesListActivity extends AppCompatActivity implements Employee
     private FloatingActionButton fab;
     private static String TAG = "LOG";
     private int gridListCounter;
+    private static int RECYCLER_LINEAR_LAYOUT = 1;
+    private static int RECYCLER_GRID_LAYOUT = 2;
 
 
 
@@ -52,7 +54,7 @@ public class EmployeesListActivity extends AppCompatActivity implements Employee
 
 
     @Override
-    public void onLongClickListener(final Employee employee) {
+    public void onLongClickListener(final Employee employee) { //on long raisuje dialog email, delete, phone
         final Dialog d = new Dialog(EmployeesListActivity.this);
         d.setContentView(R.layout.dialog_email_delete);
 
@@ -63,7 +65,7 @@ public class EmployeesListActivity extends AppCompatActivity implements Employee
 
         imgDelete.setOnClickListener(new View.OnClickListener() { //on delete listener
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) { //listener za imgdelete koji brise employee-a
                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -95,7 +97,7 @@ public class EmployeesListActivity extends AppCompatActivity implements Employee
 
         imgPhone.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) { //poziva intent za phone dial
                 Intent i = new Intent(Intent.ACTION_DIAL);
                 i.setData(Uri.parse("tel:" + employee.getNumber()));
                 startActivity(i);
@@ -106,7 +108,7 @@ public class EmployeesListActivity extends AppCompatActivity implements Employee
 
         imgEmail.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) { //poziva intent za mejl
                 String email = employee.getEmail();
                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", email, null));
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
@@ -142,15 +144,15 @@ public class EmployeesListActivity extends AppCompatActivity implements Employee
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) { //handluje klik na menu ikonicu
         int id = item.getItemId();
         if (id == R.id.menu_icon_sort) {
                 Collections.reverse(HomeActivity.employeeDao.getEmployees());
                 adapter.setEmployees(HomeActivity.employeeDao.getEmployees()); //SORTIRANJE (IZVRTANJE)
         }
-        else if (id == R.id.menu_item_grid) { //menja u grid
-            if (gridListCounter == 1) {
-                gridListCounter = 2;
+        else if (id == R.id.menu_item_grid) { //menja izgled recyclera u grid
+            if (gridListCounter == RECYCLER_LINEAR_LAYOUT) {
+                gridListCounter = RECYCLER_GRID_LAYOUT;
                 adapter = null;
                 adapter = new EmployeeGridAdapterEmployee(this);
                 adapter.setEmployees(HomeActivity.employeeDao.getEmployees());
@@ -160,8 +162,8 @@ public class EmployeesListActivity extends AppCompatActivity implements Employee
                 item.setIcon(R.drawable.ic_list_black_24dp);
 
             }
-            else if (gridListCounter == 2) { //menja u linear
-                gridListCounter = 1;
+            else if (gridListCounter == RECYCLER_GRID_LAYOUT) { //menja layout recyclera u linear
+                gridListCounter = RECYCLER_LINEAR_LAYOUT;
                 LinearLayoutManager layoutManager = new LinearLayoutManager(this);
                 adapter = null;
                 adapter = new EmployeeLinearAdapterEmployee(this);
@@ -176,7 +178,7 @@ public class EmployeesListActivity extends AppCompatActivity implements Employee
         return super.onOptionsItemSelected(item);
     }
 
-    private void afterViews() {
+    private void afterViews() { //view inject
         adapter = new EmployeeLinearAdapterEmployee(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setAdapter(adapter);

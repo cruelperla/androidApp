@@ -60,7 +60,7 @@ public class AddNewEmployeeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_employee);
         employee = new Employee();
-        afterViews();
+        afterViews(); //injects all the views oncreate
 
 
     }
@@ -124,11 +124,11 @@ public class AddNewEmployeeActivity extends AppCompatActivity {
     }
 
     public void importFromStorageIntent() {
-        Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI); //zove intent za otvaranje storage-a
         startActivityForResult(i, RESULT_LOAD_IMAGE);
     }
 
-    public void importFromCameraIntent() {
+    public void importFromCameraIntent() { //zove intent za import sa kamere
         Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         if (i.resolveActivity(getPackageManager()) != null) {
@@ -158,7 +158,7 @@ public class AddNewEmployeeActivity extends AppCompatActivity {
         return picturePath;
     }
 
-    public void afterViews(){
+    public void afterViews(){ //view inject
         officesSpinner = (Spinner) findViewById(R.id.spinner_offices);
         etName = (EditText) findViewById(R.id.et_employee_name);
         etEmail = (EditText) findViewById(R.id.et_employee_email);
@@ -172,7 +172,7 @@ public class AddNewEmployeeActivity extends AppCompatActivity {
 
         ArrayList<String> officeNames = new ArrayList<>();
         final ArrayList<String> officeIds = new ArrayList<>();
-        for (Office office: HomeActivity.officeDao.getOfficeList()) {
+        for (Office office: HomeActivity.officeDao.getOfficeList()) { //petlja za popunjavanje spinera, office names je array lista u spinneru
             officeNames.add(office.getName());
             officeIds.add(office.getId());
         }
@@ -191,7 +191,7 @@ public class AddNewEmployeeActivity extends AppCompatActivity {
                 String position = etPosition.getText().toString();
                 employee.setName(name);
                 if (email.equals("")) {
-                    employee.setEmail("Undefined");
+                    employee.setEmail("N/A");
                 }
                 else {
                     employee.setEmail(email);
@@ -254,7 +254,7 @@ public class AddNewEmployeeActivity extends AppCompatActivity {
 
         imgEmployee.setOnClickListener(new View.OnClickListener() { //listener image view-a otvara dialog odakle se bira import path (camera / storage)
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) { //klik na image view raisuje dialog koji promptuje import sa storage-a ili kamere
                 final Dialog dialog = new Dialog(AddNewEmployeeActivity.this);
                 dialog.setContentView(R.layout.dialog_import_photo);
                 ImageButton btnCamera = (ImageButton) dialog.findViewById(R.id.btn_dialog_camera);

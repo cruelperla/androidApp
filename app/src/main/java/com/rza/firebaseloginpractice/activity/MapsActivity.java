@@ -58,7 +58,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) { //btn ok zatvara activity (jer se poziva for result) i postavlja vrednosti za lat i lng
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("lat", lat);
                 returnIntent.putExtra("lng", lng);
@@ -81,7 +81,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+        mMap = googleMap; //odma na otvaranju pita za permission ako nema permissiona
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{
@@ -94,7 +94,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    private void initMap() {
+    private void initMap() { //postavlja marker na poziciju telefona
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         criteria = new Criteria();
         location = getLastKnownLocation();
@@ -102,7 +102,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (location != null) {
             Log.d("location", "not null");
             LatLng locationgLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-            lat = String.valueOf(locationgLatLng.latitude);
+            lat = String.valueOf(locationgLatLng.latitude); //odma na otvaranju postavlja lat i lng na poziciju telefona
             lng = String.valueOf(locationgLatLng.longitude);
 
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(locationgLatLng, 13)); //
@@ -119,7 +119,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
-            public void onMapClick(LatLng latLng) {
+            public void onMapClick(LatLng latLng) { //na klik se postavlja marker i lat lng promenljive na mesto klika
                 mMap.clear();
                 mMap.addMarker(new MarkerOptions()
                         .position(latLng));
@@ -133,13 +133,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed() { //na back pressed zatvara activity i postavlja result canceled
         super.onBackPressed();
         setResult(RESULT_CANCELED);
         finish();
     }
 
-    private Location getLastKnownLocation() {
+    private Location getLastKnownLocation() { //vraca najprecizniju poznatu lokaciju uredjaja
         List<String> providers = locationManager.getProviders(true);
         Location bestLocation = null;
 
@@ -158,7 +158,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
+        switch (requestCode) { //otvara permission prompt
             case PERMISSION_REQUEST_ACCESS_LOCATION: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     initMap();
