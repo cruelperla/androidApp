@@ -180,17 +180,21 @@ public class OfficeDetailsActivity extends AppCompatActivity implements Employee
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         criteria = new Criteria();
         location = getBestKnownLocation();
-        if (lat != null && lng != null) {
-            userLat = String.valueOf(location.getLatitude());
-            userLng = String.valueOf(location.getLongitude());
+        if (location != null) {
+            if (lat != null && lng != null) {
+                userLat = String.valueOf(location.getLatitude());
+                userLng = String.valueOf(location.getLongitude());
 
 
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                        Uri.parse("http://maps.google.com/maps?saddr=" + userLat + "," + userLng + "&daddr=" + lat + "," + lng));
+                startActivity(intent);
+            }
 
-            Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                    Uri.parse("http://maps.google.com/maps?saddr=" + userLat + "," + userLng + "&daddr=" + lat + "," + lng));
-            startActivity(intent);
         }
-
+        else {
+            Toasty.error(OfficeDetailsActivity.this, "Cannot locate your device!", Toast.LENGTH_SHORT, true).show();
+        }
     }
 
     private Location getBestKnownLocation() { //nalazi najbolju lokaciju telefona

@@ -70,6 +70,7 @@ public class AddNewOfficeActivity extends AppCompatActivity {
                 String officeName = etOfficeName.getText().toString();
                 if (officeName != null) {
                     office.setName(officeName);
+                    HomeActivity.officeDao.getOfficeList().add(office);
                     HomeActivity.officeDao.write(office);
                     clearViews();
                     Toasty.success(AddNewOfficeActivity.this, "Office successfully added!", Toast.LENGTH_SHORT, true).show();
@@ -170,7 +171,9 @@ public class AddNewOfficeActivity extends AppCompatActivity {
         });
     }
 
+
     public void clearViews() { //clears views
+
         etOfficeName.setText("");
         tvLat.setText("");
         tvLng.setText("");

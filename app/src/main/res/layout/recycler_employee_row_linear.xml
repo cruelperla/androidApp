@@ -1,76 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
-    android:padding="5dp"
-    android:background="@color/primary"
-    android:layout_margin="10dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginTop="5dp"
+    android:background="@color/primary"
+    android:orientation="horizontal"
+    android:padding="2dp">
 
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="10dp">
-
-
-    <com.facebook.drawee.view.SimpleDraweeView
-        android:id="@+id/sdv_employee_image"
-        android:layout_width="100dp"
-        android:layout_height="100dp" />
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_employee_name"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:text="name last name"
-            android:textAlignment="viewEnd"
-            android:textSize="20sp"/>
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tv_employee_email"
-            android:layout_width="match_parent"
-            android:layout_marginRight="5dp"
-            android:text="email@email.com"
-            android:textAlignment="viewEnd"
-            android:textSize="20sp"
-            android:layout_height="wrap_content" />
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/sdv_employee_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp" />
 
-        <TextView
-            android:id="@+id/tv_employee_position"
-            android:layout_width="match_parent"
-            android:layout_marginRight="5dp"
-            android:text="position"
-            android:textSize="20sp"
-            android:textAlignment="viewEnd"
-            android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_employee_birth"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="21.02.2012."
-            android:layout_marginRight="5dp"
-            android:textSize="20sp"
-            android:textAlignment="viewEnd" />
+                <TextView
+                    android:id="@+id/tv_employee_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:text="name last name"
+                    android:textAlignment="viewStart"
+                    android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/tv_employee_phone_number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:text="+38163564564"
-            android:textSize="20sp"
-            android:textAlignment="viewEnd"/>
+                <TextView
+                    android:id="@+id/tv_employee_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:text="email@email.com"
+                    android:textAlignment="viewStart"
+                    android:textSize="18sp" />
 
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_employee_position"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:text="position"
+                    android:textAlignment="viewStart"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tv_employee_birth"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:text="21.02.2012."
+                    android:textAlignment="viewStart"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tv_employee_phone_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:text="+38163564564"
+                    android:textAlignment="viewStart"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+        </LinearLayout>
     </android.support.v7.widget.CardView>
 
 </LinearLayout>

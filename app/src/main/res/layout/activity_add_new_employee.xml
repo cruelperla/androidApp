@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 <LinearLayout
+    android:layout_marginTop="30dp"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -171,7 +172,7 @@
     <ImageView
         android:id="@+id/iv_employee_image"
         android:layout_width="150dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:layout_height="150dp"
         android:contentDescription="No idea what this is"
         android:src="@drawable/add_image"
