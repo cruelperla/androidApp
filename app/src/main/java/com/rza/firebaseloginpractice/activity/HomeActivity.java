@@ -134,4 +134,9 @@ public class HomeActivity extends AppCompatActivity {
         btnAssets = (Button) findViewById(R.id.btn_assets);
         btnEmployees = (Button) findViewById(R.id.btn_employees);
     }
+
+    @Override
+    public void onBackPressed() {
+
+    }
 }

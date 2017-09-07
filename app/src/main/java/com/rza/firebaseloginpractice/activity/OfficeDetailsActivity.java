@@ -130,7 +130,7 @@ public class OfficeDetailsActivity extends AppCompatActivity implements Employee
                         switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
                                 HomeActivity.employeeDao.delete(emp);
-                                adapter.setEmployees(HomeActivity.employeeDao.getEmployees());
+                                adapter.setEmployees(HomeActivity.employeeDao.getEmployeesByOfficeId(office.getId()));
                                 Toasty.success(OfficeDetailsActivity.this, "Employee deleted!", Toast.LENGTH_SHORT, true).show();
                                 dialog.dismiss();
                                 break;
@@ -239,8 +239,7 @@ public class OfficeDetailsActivity extends AppCompatActivity implements Employee
                             HomeActivity.employeeDao.deleteByOfficeId(office);
                             Toasty.success(OfficeDetailsActivity.this, "Office deleted!", Toast.LENGTH_SHORT, true).show();
                             dialog.dismiss();
-                            Intent i = new Intent(OfficeDetailsActivity.this, OfficesListActivity.class);
-                            startActivity(i);
+                            finish();
                             break;
                         case DialogInterface.BUTTON_NEGATIVE:
                             dialog.dismiss();
@@ -259,6 +258,7 @@ public class OfficeDetailsActivity extends AppCompatActivity implements Employee
         }
         return true;
         }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

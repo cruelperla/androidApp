@@ -1,6 +1,7 @@
 package com.rza.firebaseloginpractice.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,6 +68,7 @@ public class OfficeAdapter extends RecyclerView.Adapter<OfficeAdapter.OfficeView
             super(v);
             tvName = (TextView) v.findViewById(R.id.tv_office_name);
             sdvOfficeImage = (SimpleDraweeView) v.findViewById(R.id.sdv_office_image);
+            tvName.setTypeface(null, Typeface.BOLD);
             v.setOnClickListener(this);
         }
 
@@ -77,7 +79,7 @@ public class OfficeAdapter extends RecyclerView.Adapter<OfficeAdapter.OfficeView
                 sdvOfficeImage.setImageURI(office.getImgUrl());
             }
             else {
-                sdvOfficeImage.setImageResource(R.drawable.officeroom);
+                sdvOfficeImage.setImageURI("https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Office_room_icon.svg/1024px-Office_room_icon.svg.png");
             }
         }
 

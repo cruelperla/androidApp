@@ -32,6 +32,7 @@ import com.rza.firebaseloginpractice.model.Office;
 import com.rza.firebaseloginpractice.storage.OnImageUploadedListener;
 import com.rza.firebaseloginpractice.storage.PhotoStorage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -86,13 +87,12 @@ public class AddNewEmployeeActivity extends AppCompatActivity {
                 Toasty.info(AddNewEmployeeActivity.this, "Wait while image is uploading", Toast.LENGTH_LONG, true).show();
             }
         }
-        else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) { //otvara kameru
-            if (isCameraPermissionGranted()) {
-                //dodati logiku za dodavanje sa kamere
-                storePhoto();
-
-
-            }
+        else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null) { //otvara kameru
+            Bundle extras = data.getExtras();
+            Bitmap bitmap = (Bitmap) extras.get("data");
+            imgEmployee.setImageBitmap(bitmap);
+            Toasty.info(AddNewEmployeeActivity.this, "Wait while image is uploading", Toast.LENGTH_LONG, true).show();
+            storePhoto();
         }
     }
 
@@ -213,7 +213,7 @@ public class AddNewEmployeeActivity extends AppCompatActivity {
                         }
                     });
 
-                    Toast.makeText(AddNewEmployeeActivity.this, employee.toString() + " added to Database", Toast.LENGTH_SHORT).show();
+                    Toasty.success(AddNewEmployeeActivity.this, "Employee Successfuly added!", Toast.LENGTH_SHORT, true).show();
                     clearViews(); //sets name, email, position, date to ""
                 }
             }
